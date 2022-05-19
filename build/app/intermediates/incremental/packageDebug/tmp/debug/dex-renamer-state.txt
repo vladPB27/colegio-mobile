@@ -1,0 +1,4 @@
+#Wed May 18 15:31:03 PET 2022
+base.0=/home/vlad/AndroidStudioProjects/colegio_app/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
