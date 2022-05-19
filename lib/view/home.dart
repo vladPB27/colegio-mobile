@@ -37,10 +37,10 @@ class _HomeState extends State<Home> {
           'I.E.P. Qenqoro',
           style: TextStyle(color: ColorsSchool.fourthColor),
         ),
-        backgroundColor: ColorsSchool.secondaryColor,
+        backgroundColor: ColorsSchool.primaryColor,
       ),
       drawer: NavigationDrawerWidget(),
-      backgroundColor: ColorsSchool.secondaryColor,
+      backgroundColor: ColorsSchool.fifthColor,
       body: SafeArea(
         // child: SingleChildScrollView(
         child: RefreshIndicator(

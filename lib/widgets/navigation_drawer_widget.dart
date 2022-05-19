@@ -10,7 +10,7 @@ class NavigationDrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final name = 'Usuario';
     final email = 'Usuario@gmail.com';
-    final photo = './assets/user.png';
+    final photo = 'assets/images/user.png';
 
     return Drawer(
       child: Material(
@@ -22,14 +22,16 @@ class NavigationDrawerWidget extends StatelessWidget {
                 urlImage: photo, name: name, email: email, onClicked: () =>
             {
             }),
-            // const SizedBox(height: 48,),
+            const SizedBox(height: 20,),
+            Divider(color: ColorsSchool.fifthColor,),
             buildMenuItem(text: 'Alumnos', icon: Icons.people,onClicked:()=> selectedItem(context, 0)),
             buildMenuItem(text: 'Docentes', icon: Icons.wc_outlined,onClicked:()=> selectedItem(context, 1)),
             buildMenuItem(
                 text: 'Salones', icon: Icons.account_balance_outlined,onClicked:()=> selectedItem(context, 2)),
             Divider(color: ColorsSchool.fifthColor,),
             buildMenuItem(text: 'Ajustes', icon: Icons.settings,onClicked:()=> selectedItem(context, 3)),
-            buildMenuItem(text: 'Cerrar Sesión', icon: Icons.logout,onClicked:()=> selectedItem(context, 4)),
+            buildMenuItem(text: 'Acerca de', icon: Icons.mobile_screen_share_outlined,onClicked:()=> selectedItem(context, 4)),
+            buildMenuItem(text: 'Cerrar Sesión', icon: Icons.logout,onClicked:()=> selectedItem(context, 5)),
           ],
         ),
       ),
@@ -38,7 +40,7 @@ class NavigationDrawerWidget extends StatelessWidget {
 
   buildMenuItem({required String text, required IconData icon,required VoidCallback onClicked}) {
     return ListTile(
-      leading: Icon(icon, color: ColorsSchool.fourthColor,),
+      leading: Icon(icon, color: ColorsSchool.fifthColor,),
       title: Text(text, style: TextStyle(color: ColorsSchool.fourthColor),),
       onTap: () {
         onClicked();
@@ -54,9 +56,19 @@ class NavigationDrawerWidget extends StatelessWidget {
           child: Row(
             children: [
               CircleAvatar(
-                radius: 30, backgroundImage: AssetImage(urlImage),
+                radius: 35, backgroundImage: AssetImage(urlImage),
               ),
-              Text('$name   $email')
+              Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('$name',style: TextStyle(color: ColorsSchool.fifthColor),),
+                    Text('$email',style: TextStyle(color: ColorsSchool.fifthColor),),
+                  ],
+                ),
+              )
+
             ],
           ),
         ),
