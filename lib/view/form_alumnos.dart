@@ -8,13 +8,26 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class FormAlumnos extends StatefulWidget {
-  const FormAlumnos({Key? key}) : super(key: key);
+
+  final Alumno? dataAlumno;
+  const FormAlumnos(this.dataAlumno,{Key? key}) : super(key: key);
 
   @override
   _FormAlumnosState createState() => _FormAlumnosState();
 }
 
 class _FormAlumnosState extends State<FormAlumnos> {
+
+  @override
+  void initState() {
+    if(widget.dataAlumno != null){
+      print('DATOS: ${widget.dataAlumno!.toJson()}');
+    }else{
+      print('NULL');
+    }
+
+    super.initState();
+  }
   var alumnoWebRepo = AlumnoWebRepository();
 
   final nombres = TextEditingController();
@@ -70,6 +83,40 @@ class _FormAlumnosState extends State<FormAlumnos> {
     datosMadre.dispose();
     direccion.dispose();
     super.dispose();
+  }
+
+  agregar() async{
+    Alumno alumn = Alumno(
+        nombres: nombres.text,
+        apellidoPaterno: apPaterno.text,
+        apellidoMaterno: apMaterno.text,
+        sexo: sexo.text,
+        dni: nroDni.text,
+        fechaNacimiento: fechaNacimiento.text,
+        celular: telefono.text,
+        email: email.text,
+        datosDelPadre: '',
+        datosDelaMadre: '',
+        direccion: direccion.text);
+    alumnoWebRepo.addAlumno(alumn);
+  }
+
+  actualizar() async{
+    Alumno alumn = Alumno(
+        id: widget.dataAlumno!.id,
+        nombres: nombres.text,
+        apellidoPaterno: apPaterno.text,
+        apellidoMaterno: apMaterno.text,
+        sexo: sexo.text,
+        dni: nroDni.text,
+        fechaNacimiento: fechaNacimiento.text,
+        celular: telefono.text,
+        email: email.text,
+        datosDelPadre: '',
+        datosDelaMadre: '',
+        direccion: direccion.text);
+    print('enviando: ${alumn.id}');
+    alumnoWebRepo.updateAlumno(alumn);
   }
 
   Widget build(BuildContext context) {
@@ -172,25 +219,17 @@ class _FormAlumnosState extends State<FormAlumnos> {
                     ),
                     child: FlatButton(
                       onPressed: () async {
-                        Alumno alumn = Alumno(
-                            nombres: nombres.text,
-                            apellidoPaterno: apPaterno.text,
-                            apellidoMaterno: apMaterno.text,
-                            sexo: sexo.text,
-                            dni: nroDni.text,
-                            fechaNacimiento: fechaNacimiento.text,
-                            celular: telefono.text,
-                            email: email.text,
-                            datosDelPadre: '',
-                            datosDelaMadre: '',
-                            direccion: direccion.text);
-                        alumnoWebRepo.addAlumno(alumn);
-                        // await addPublication().then((value) => print(value));
+                        if(widget.dataAlumno!=null){
+                          actualizar();
+                        }else{
+                          agregar();
+                        }
+
                       },
-                      child: Text(
-                        'Agregar',
+                      child: widget.dataAlumno !=null? Text(
+                        'Actualizar',
                         style: TextStyle(color: ColorsSchool.fifthColor, fontSize: 20),
-                      ),
+                      ): Text('Agregar',style: TextStyle(color: ColorsSchool.fifthColor, fontSize: 20),),
                     ),
                   ),
                   SizedBox(
@@ -216,4 +255,6 @@ class _FormAlumnosState extends State<FormAlumnos> {
       ),
     );
   }
+
+
 }

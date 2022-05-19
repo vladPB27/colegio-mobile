@@ -66,20 +66,41 @@ class AlumnoWebRepository implements AlumnoRepository{
 
   @override
   Future<String> updateAlumno(Alumno alumno) async{
-    var url = Uri.parse('$dataUrlSchool/alumnos/${alumno.dni}');
-    String resData = '';
-    await http.put(
-      url,
-      body: {
-        'nombres':(alumno.nombres).toString(),
-      },
-      headers: {'Authorization':'your_token'},
-    ).then((response) {
-      Map<String,dynamic> result = json.decode(response.body);
-      print('actualizando: ${result}');
-      return resData = result['nombres'];
-    });
-    return resData;
+    try{
+      var url = Uri.parse('$dataUrlSchool/alumnos/${alumno.id}');
+      print('URL PUT: ${url}');
+      var response = await http.put(
+        url,
+        body:alumno.toJson(),
+      );
+      print('STATUS PUT: ${response.statusCode}');
+      print('BODY PUT: ${response.body}');
+      return 'true';
+    }catch(e){
+      throw Exception('method PUT failded');
+    }
   }
+
+  // @override
+  // Future<String> updateAlumno(Alumno alumno) async{
+  //   try{
+  //     var url = Uri.parse('$dataUrlSchool/alumnos/${alumno.id}');
+  //     String resData = '';
+  //     await http.put(
+  //       url,
+  //       body: {
+  //         'nombres':(alumno.nombres).toString(),
+  //       },
+  //       headers: {'Authorization':'your_token'},
+  //     ).then((response) {
+  //       Map<String,dynamic> result = json.decode(response.body);
+  //       print('actualizando: ${result}');
+  //       return resData = result['nombres'];
+  //     });
+  //     return resData;
+  //   }catch(e){
+  //     throw Exception('method PUT failded');
+  //   }
+  // }
 
 }

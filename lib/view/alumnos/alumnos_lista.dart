@@ -1,7 +1,10 @@
+import 'dart:ffi';
+
 import 'package:colegio_app/model/alumnos.dart';
 import 'package:colegio_app/model/colors.dart';
 import 'package:colegio_app/repository/alumno_repository.dart';
 import 'package:colegio_app/view/form_alumnos.dart';
+import 'package:colegio_app/view/home.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -40,7 +43,7 @@ class _AlumnosListaState extends State<AlumnosLista> {
         leading: IconButton(
           icon: Icon(Icons.add_circle),
           onPressed: () {
-            Navigator.of(context).pushNamed('/formAlumnos');
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) => FormAlumnos(null)));
           },
         ),
       ),
@@ -74,15 +77,6 @@ class _AlumnosListaState extends State<AlumnosLista> {
                               itemBuilder: (context, i) {
                                 return GestureDetector(
                                   onTap: () {
-                                    // Navigator.of(context).pushNamed('/login');
-                                    // Navigator.of(context).push(MaterialPageRoute(
-                                    //     builder: (_) => ShowPublication()));
-
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) =>
-                                    //             ShowPublication()));
                                   },
                                   child: Container(
                                     height: 100,
@@ -138,7 +132,7 @@ class _AlumnosListaState extends State<AlumnosLista> {
                                                         Navigator.of(context).push(
                                                             MaterialPageRoute(
                                                                 builder: (_) =>
-                                                                    FormAlumnos()));
+                                                                    FormAlumnos(snapshot.data![i])));
                                                       },
                                                       child: Icon(
                                                         Icons.edit,

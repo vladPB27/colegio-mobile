@@ -13,8 +13,8 @@ class RouteGenerator{
    //   return MaterialPageRoute(builder: (_) => LaunchScreen());
      case '/home':
        return MaterialPageRoute(builder: (_) => Home());
-     case '/formAlumnos':
-       return MaterialPageRoute(builder: (_) => FormAlumnos());
+     // case '/formAlumnos':
+     //   return MaterialPageRoute(builder: (_) => FormAlumnos(data));
      case '/salonesLista':
        return MaterialPageRoute(builder: (_) => SalonesLista());
 
