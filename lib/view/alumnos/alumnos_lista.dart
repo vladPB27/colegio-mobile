@@ -39,11 +39,12 @@ class _AlumnosListaState extends State<AlumnosLista> {
           'Alumnos',
           style: TextStyle(color: ColorsSchool.fourthColor),
         ),
-        backgroundColor: ColorsSchool.secondaryColor,
+        backgroundColor: ColorsSchool.primaryColor,
         leading: IconButton(
           icon: Icon(Icons.add_circle),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_) => FormAlumnos(null)));
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => FormAlumnos(null)));
           },
         ),
       ),
@@ -76,95 +77,111 @@ class _AlumnosListaState extends State<AlumnosLista> {
                               itemCount: snapshot.data?.length,
                               itemBuilder: (context, i) {
                                 return GestureDetector(
-                                  onTap: () {
-                                  },
-                                  child: Container(
-                                    height: 100,
-                                    // color: ColorsSchool.fifthColor,
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                  onTap: () {},
+                                  child: Card(
+                                    child: ExpansionTile(
+                                      leading: CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                            'assets/images/user.png'),
+                                      ),
+                                      title:
+                                          Text('${snapshot.data?[i].nombres}'),
+                                      subtitle: Text(
+                                        '${snapshot.data?[i].apellidoPaterno} ${snapshot.data?[i].apellidoMaterno}',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: ColorsSchool.secondaryColor),
+                                      ),
                                       children: [
-                                        Expanded(
-                                          child: Container(
-                                            child: Row(
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Expanded(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        '${snapshot.data?[i].nombres}',
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            color: ColorsSchool
-                                                                .primaryColor),
-                                                      ),
-                                                      Text(
-                                                        '${snapshot.data?[i].apellidoPaterno} ${snapshot.data?[i].apellidoMaterno}',
-                                                        style: TextStyle(
-                                                            fontSize: 14,
-                                                            color: ColorsSchool
-                                                                .secondaryColor),
-                                                      ),
-                                                      Text(
-                                                        'ID: ${snapshot.data?[i].id} DNI: ${snapshot.data?[i].dni}',
-                                                        style: TextStyle(
-                                                            fontSize: 12),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                    child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
+                                                Row(
                                                   children: [
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder: (_) =>
-                                                                    FormAlumnos(snapshot.data![i])));
-                                                      },
-                                                      child: Icon(
-                                                        Icons.edit,
-                                                        color: ColorsSchool
-                                                            .thirdColor,
-                                                        size: 30,
-                                                      ),
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        exitDialog(snapshot
-                                                            .data![i].id);
-                                                        // alumnoWebRepo.deleteAlumno(snapshot.data![i]);
-                                                        // setState(() {
-                                                        //   print('refrescando screen');
-                                                        // });
-                                                      },
-                                                      child: Icon(
-                                                        Icons.delete,
-                                                        color: Colors.red,
-                                                        size: 30,
-                                                      ),
-                                                    ),
+                                                    Icon(Icons.payment),
+                                                    Text(
+                                                      '${snapshot.data?[i].dni}',
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: ColorsSchool
+                                                              .secondaryColor),
+                                                    )
                                                   ],
-                                                ))
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Icon(Icons.phone),
+                                                    Text(
+                                                      '${snapshot.data?[i].celular}',
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: ColorsSchool
+                                                              .secondaryColor),
+                                                    )
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Icon(Icons.home),
+                                                    Text(
+                                                      '${snapshot.data?[i].direccion}',
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: ColorsSchool
+                                                              .secondaryColor),
+                                                    )
+                                                  ],
+                                                )
                                               ],
                                             ),
-                                          ),
-                                        ),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (_) =>
+                                                                FormAlumnos(
+                                                                    snapshot.data![
+                                                                        i])));
+                                                  },
+                                                  child: Icon(
+                                                    Icons.edit,
+                                                    color:
+                                                        ColorsSchool.primaryColor,
+                                                    size: 25,
+                                                  ),
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    exitDialog(
+                                                        snapshot.data![i].id);
+                                                    alumnoWebRepo.deleteAlumno(snapshot.data![i].id!);
+                                                    // setState(() {
+                                                    //   print('refrescando screen');
+                                                    // });
+                                                  },
+                                                  child: Icon(
+                                                    Icons.delete,
+                                                    color: Colors.red,
+                                                    size: 25,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        )
                                       ],
                                     ),
                                   ),
+                                );
+                                Divider(
+                                  color: Colors.black,
                                 );
                               });
                       },

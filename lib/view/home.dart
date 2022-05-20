@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         title: Text(
           'I.E.P. Qenqoro',
-          style: TextStyle(color: ColorsSchool.fourthColor),
+          style: TextStyle(color: ColorsSchool.secondaryColor),
         ),
         backgroundColor: ColorsSchool.primaryColor,
       ),
