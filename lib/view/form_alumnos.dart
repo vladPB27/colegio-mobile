@@ -129,7 +129,7 @@ class _FormAlumnosState extends State<FormAlumnos> {
             'Agregar Alumno',
             style: TextStyle(color: ColorsSchool.fourthColor,fontSize: 25),
           ),
-          backgroundColor: ColorsSchool.secondaryColor,
+          backgroundColor: ColorsSchool.primaryColor,
         ),
         // backgroundColor: ColorsSchool.secondaryColor,
         body: Container(

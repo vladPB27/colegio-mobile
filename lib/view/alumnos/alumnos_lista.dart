@@ -39,7 +39,7 @@ class _AlumnosListaState extends State<AlumnosLista> {
           'Alumnos',
           style: TextStyle(color: ColorsSchool.fourthColor),
         ),
-        backgroundColor: ColorsSchool.secondaryColor,
+        backgroundColor: ColorsSchool.primaryColor,
         leading: IconButton(
           icon: Icon(Icons.add_circle),
           onPressed: () {
@@ -139,6 +139,7 @@ class _AlumnosListaState extends State<AlumnosLista> {
                                               ],
                                             ),
                                             Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
                                                 GestureDetector(
                                                   onTap: () {
@@ -152,8 +153,8 @@ class _AlumnosListaState extends State<AlumnosLista> {
                                                   child: Icon(
                                                     Icons.edit,
                                                     color:
-                                                        ColorsSchool.thirdColor,
-                                                    size: 30,
+                                                        ColorsSchool.primaryColor,
+                                                    size: 25,
                                                   ),
                                                 ),
                                                 GestureDetector(
@@ -168,7 +169,7 @@ class _AlumnosListaState extends State<AlumnosLista> {
                                                   child: Icon(
                                                     Icons.delete,
                                                     color: Colors.red,
-                                                    size: 30,
+                                                    size: 25,
                                                   ),
                                                 ),
                                               ],

@@ -14,7 +14,7 @@ class NavigationDrawerWidget extends StatelessWidget {
 
     return Drawer(
       child: Material(
-        color: ColorsSchool.secondaryColor,
+        color: ColorsSchool.primaryColor,
         child: ListView(
           padding: EdgeInsets.symmetric(vertical: 30.0,horizontal: 20.0),
           children: [
@@ -23,7 +23,7 @@ class NavigationDrawerWidget extends StatelessWidget {
             {
             }),
             const SizedBox(height: 20,),
-            Divider(color: ColorsSchool.fifthColor,),
+            Divider(color: ColorsSchool.thirdColor,),
             buildMenuItem(text: 'Alumnos', icon: Icons.people,onClicked:()=> selectedItem(context, 0)),
             buildMenuItem(text: 'Docentes', icon: Icons.wc_outlined,onClicked:()=> selectedItem(context, 1)),
             buildMenuItem(
@@ -40,8 +40,8 @@ class NavigationDrawerWidget extends StatelessWidget {
 
   buildMenuItem({required String text, required IconData icon,required VoidCallback onClicked}) {
     return ListTile(
-      leading: Icon(icon, color: ColorsSchool.fifthColor,),
-      title: Text(text, style: TextStyle(color: ColorsSchool.fourthColor),),
+      leading: Icon(icon, color: ColorsSchool.secondaryColor,),
+      title: Text(text, style: TextStyle(color: ColorsSchool.thirdColor),),
       onTap: () {
         onClicked();
       },
