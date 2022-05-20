@@ -22,7 +22,6 @@ class _AlumnosListaState extends State<AlumnosLista> {
   Future _refreshAgain() async {
     setState(() {});
   }
-
   @override
   void initState() {
     super.initState();
@@ -118,7 +117,13 @@ class _AlumnosListaState extends State<AlumnosLista> {
                                                         'ID: ${snapshot.data?[i].id} DNI: ${snapshot.data?[i].dni}',
                                                         style: TextStyle(
                                                             fontSize: 12),
+                                                      ),
+                                                      Text(
+                                                        'Tlf: ${snapshot.data?[i].celular}',
+                                                        style: TextStyle(
+                                                            fontSize: 12),
                                                       )
+
                                                     ],
                                                   ),
                                                 ),
