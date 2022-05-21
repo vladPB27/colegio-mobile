@@ -29,13 +29,12 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           'I.E.P. Qenqoro',
-          style: TextStyle(color: ColorsSchool.secondaryColor),
+          style: TextStyle(color: ColorsSchool.fourthColor),
         ),
         backgroundColor: ColorsSchool.primaryColor,
       ),
@@ -47,7 +46,36 @@ class _HomeState extends State<Home> {
           onRefresh: _refreshAgain,
           child: Column(
             children: [
-              Text('HOME')
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  height: 150,
+                  // width: 150,
+                  decoration: BoxDecoration(color: ColorsSchool.primaryColor),
+                ),
+              ),
+              Expanded(
+                  child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                height: 150,
+                // width: 150,
+                decoration: BoxDecoration(color: ColorsSchool.secondaryColor),
+              )),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  height: 150,
+                  // width: 150,
+                  decoration: BoxDecoration(color: ColorsSchool.thirdColor),
+                ),
+              ),
+              Expanded(
+                  child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                height: 150,
+                // width: 150,
+                decoration: BoxDecoration(color: ColorsSchool.fourthColor),
+              )),
             ],
           ),
         ),
