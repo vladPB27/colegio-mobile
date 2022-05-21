@@ -20,17 +20,13 @@ class _FormAlumnosState extends State<FormAlumnos> {
 
   @override
   void initState() {
-    if(widget.dataAlumno != null){
-      print('DATOS: ${widget.dataAlumno!.toJson()}');
-    }else{
-      print('NULL');
-    }
+    getDataUpdateStudent();
 
     super.initState();
   }
   var alumnoWebRepo = AlumnoWebRepository();
 
-  final nombres = TextEditingController();
+  TextEditingController nombres = TextEditingController();
   final apPaterno = TextEditingController();
   final apMaterno = TextEditingController();
   final sexo = TextEditingController();
@@ -119,6 +115,23 @@ class _FormAlumnosState extends State<FormAlumnos> {
     alumnoWebRepo.updateAlumno(alumn);
   }
 
+  getDataUpdateStudent(){
+    if(widget.dataAlumno != null){
+      print('DATOS: ${widget.dataAlumno!.toJson()}');
+      nombres.text = '${widget.dataAlumno!.nombres}';
+      apPaterno.text = '${widget.dataAlumno!.apellidoPaterno}';
+      apMaterno.text = '${widget.dataAlumno!.apellidoMaterno}';
+      sexo.text = '${widget.dataAlumno!.sexo}';
+      nroDni.text = '${widget.dataAlumno!.dni}';
+      fechaNacimiento.text = '${widget.dataAlumno!.fechaNacimiento}';
+      telefono.text = '${widget.dataAlumno!.celular}';
+      email.text = '${widget.dataAlumno!.email}';
+      direccion.text = '${widget.dataAlumno!.direccion}';
+    }else{
+      print('NULL');
+    }
+  }
+
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -155,85 +168,108 @@ class _FormAlumnosState extends State<FormAlumnos> {
                     // padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
                     padding: EdgeInsets.only(left: 50.0, right: 50.0, top: 10, bottom: 0),
                     child:
-                        widgetTextField(nombres, 'nombres', 'Ingrese nombre'),
+                        widgetTextField(nombres, 'nombres', 'Ingrese nombre',Icons.perm_identity_outlined),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 50.0, right: 50.0, top: 10, bottom: 0),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
                     child: widgetTextField(
-                        apPaterno, 'A. Paterno', 'Ingrese apellido paterno'),
+                        apPaterno, 'A. Paterno', 'Ingrese apellido paterno',Icons.perm_identity_outlined),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 50.0, right: 50.0, top: 10, bottom: 0),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
                     child: widgetTextField(
-                        apMaterno, 'A. Materno', 'Ingrese nombre'),
+                        apMaterno, 'A. Materno', 'Ingrese nombre',Icons.perm_identity_outlined),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 50.0, right: 50.0, top: 10, bottom: 0),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
-                    child: widgetTextField(sexo, 'genero', 'Ingrese nombre'),
+                    child: widgetTextField(sexo, 'genero', 'Ingrese nombre',Icons.wc_outlined),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 50.0, right: 50.0, top: 10, bottom: 0),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
-                    child: widgetTextField(nroDni, 'DNI', 'Ingrese nombre'),
+                    child: widgetTextField(nroDni, 'DNI', 'Ingrese nombre',Icons.call_to_action_rounded),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 50.0, right: 50.0, top: 10, bottom: 0),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
                     child: widgetTextField(
-                        fechaNacimiento, 'Fecha Ncto.', 'Ingrese nombre'),
+                        fechaNacimiento, 'Fecha Ncto.', 'Ingrese nombre',Icons.date_range_outlined),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 50.0, right: 50.0, top: 10, bottom: 0),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
                     child:
-                        widgetTextField(telefono, 'Telefono', 'Ingrese nombre'),
+                        widgetTextField(telefono, 'Teléfono', 'Ingrese teléfono',Icons.phone),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 50.0, right: 50.0, top: 10, bottom: 0),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
-                    child: widgetTextField(email, 'Email', 'Ingrese nombre'),
+                    child: widgetTextField(email, 'Email', 'Ingrese email',Icons.email),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
-                        left: 50.0, right: 50.0, top: 10, bottom: 10),
+                        left: 50.0, right: 50.0, top: 10, bottom: 20),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
                     child: widgetTextField(
-                        direccion, 'Direccion', 'Ingrese nombre'),
+                        direccion, 'Dirección', 'Ingrese dirección',Icons.home),
                   ),
-                  Container(
-                    height: 50,
-                    width: 200,
-                    decoration: BoxDecoration(
-                      color: ColorsSchool.secondaryColor,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: FlatButton(
-                      onPressed: () async {
-                        if(widget.dataAlumno!=null){
-                          actualizar();
-                        }else{
-                          agregar();
-                        }
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        height: 40,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          color: ColorsSchool.primaryColor,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: TextButton(
+                          onPressed: (){
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            'Cancelar',
+                            style: TextStyle(color: ColorsSchool.fourthColor, fontSize: 15),
+                          ),
+                        ),
+                      ),
 
-                      },
-                      child: widget.dataAlumno !=null? Text(
-                        'Actualizar',
-                        style: TextStyle(color: ColorsSchool.fifthColor, fontSize: 20),
-                      ): Text('Agregar',style: TextStyle(color: ColorsSchool.fifthColor, fontSize: 20),),
-                    ),
+                      Container(
+                        height: 40,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          color: ColorsSchool.primaryColor,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: FlatButton(
+                          onPressed: () async {
+                            if(widget.dataAlumno!=null){
+                              actualizar();
+                            }else{
+                              agregar();
+                            }
+
+                          },
+                          child: widget.dataAlumno !=null? Text(
+                            'Actualizar',
+                            style: TextStyle(color: ColorsSchool.fourthColor, fontSize: 15),
+                          ): Text('Agregar',style: TextStyle(color: ColorsSchool.fourthColor, fontSize: 15),),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(
-                    height: 40,
+                    height: 20,
                   ),
                   Text('Ingrese todos los campos')
                 ],
@@ -245,13 +281,14 @@ class _FormAlumnosState extends State<FormAlumnos> {
     );
   }
 
-  TextField widgetTextField(controller, String label, String placeholder) {
+  TextField widgetTextField(controller, String label, String placeholder,IconData icono) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
           // border: OutlineInputBorder(),
           labelText: label,
-          hintText: placeholder
+          hintText: placeholder,
+          icon: Icon(icono,color: ColorsSchool.primaryColor,)
       ),
     );
   }
