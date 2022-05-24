@@ -1,5 +1,6 @@
 import 'package:colegio_app/model/colors.dart';
 import 'package:colegio_app/view/alumnos/alumnos_lista.dart';
+import 'package:colegio_app/view/docentes/docentes_lista.dart';
 import 'package:colegio_app/view/salones/salones_lista.dart';
 import 'package:flutter/material.dart';
 
@@ -81,7 +82,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         Navigator.of(context).push(MaterialPageRoute(builder: (_)=> AlumnosLista()));
         break;
       case 1:
-        Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SalonesLista()));
+        Navigator.of(context).push(MaterialPageRoute(builder: (_)=> DocentesLista()));
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SalonesLista()));

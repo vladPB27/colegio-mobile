@@ -27,7 +27,6 @@ class AlumnoWebRepository implements AlumnoRepository{
       print(error);
       throw Exception('method GET failded');
     }
-
   }
 
   @override
