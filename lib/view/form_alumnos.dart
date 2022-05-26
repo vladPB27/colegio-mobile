@@ -1,8 +1,7 @@
-import 'package:colegio_app/controller/todo_controller.dart';
 import 'package:colegio_app/model/alumnos.dart';
 import 'package:colegio_app/model/colors.dart';
 import 'package:colegio_app/repository/alumno_repository.dart';
-import 'package:colegio_app/repository/todo_repository.dart';
+import 'package:colegio_app/view/alumnos/alumnos_lista.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -235,7 +234,11 @@ class _FormAlumnosState extends State<FormAlumnos> {
                         ),
                         child: TextButton(
                           onPressed: (){
-                            Navigator.of(context).pop();
+                            // Navigator.of(context).pop();
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> AlumnosLista()));
+                            // setState(() {
+                            //
+                            // });
                           },
                           child: Text(
                             'Cancelar',
@@ -258,6 +261,11 @@ class _FormAlumnosState extends State<FormAlumnos> {
                             }else{
                               agregar();
                             }
+                            setState(() {
+
+                            });
+                            //TODO si se agrego correctamente
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> AlumnosLista()));
 
                           },
                           child: widget.dataAlumno !=null? Text(

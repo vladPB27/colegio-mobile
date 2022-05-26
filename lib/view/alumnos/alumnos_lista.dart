@@ -40,13 +40,12 @@ class _AlumnosListaState extends State<AlumnosLista> {
           style: TextStyle(color: ColorsSchool.fourthColor),
         ),
         backgroundColor: ColorsSchool.primaryColor,
-        leading: IconButton(
-          icon: Icon(Icons.add_circle),
-          onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => FormAlumnos(null)));
-          },
-        ),
+        // leading: IconButton(
+        //   icon: Icon(Icons.add_circle),
+        //   onPressed: () {
+        //
+        //   },
+        // ),
       ),
       // drawer: NavigationDrawerWidget(),
       // backgroundColor: ColorsSchool.secondaryColor,
@@ -275,7 +274,10 @@ class _AlumnosListaState extends State<AlumnosLista> {
                     size: 25,
                     color: color,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (_) => FormAlumnos(null)));
+                  },
                 ),
                 Text(
                   'Agregar',
