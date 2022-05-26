@@ -23,19 +23,17 @@ class DocenteWebRepository implements DocenteRepository{
   @override
   Future<List<Docente>> getDocentes() async{
     try{
-      List<Docente> docentesList = [];
+
       var url = Uri.parse('$dataUrlSchool/docentes');
       return await http.get(url).then((value) {
         print('data: ${value.body}');
         var body = json.decode(value.body);
+        List<Docente> docentesList = [];
         for(var i =0;i< body.length;i++){
           docentesList.add(Docente.fromJson(body[i]));
         }
         return docentesList;
       });
-      // print('res: ${response.body}');
-      // var body = json.decode(response.body);
-      // return docentesList;
     }catch(e){
       throw Exception('Error: $e');
     }

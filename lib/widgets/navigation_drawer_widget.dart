@@ -76,7 +76,6 @@ class NavigationDrawerWidget extends StatelessWidget {
       );
 
   selectedItem(BuildContext context, int index) {
-    print('PRESS: $index');
     switch (index){
       case 0:
         Navigator.of(context).push(MaterialPageRoute(builder: (_)=> AlumnosLista()));

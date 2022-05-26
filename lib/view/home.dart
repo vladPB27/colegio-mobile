@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'I.E.P. Qenqoro',
+          'I.E.P. Cusco',
           style: TextStyle(color: ColorsSchool.fourthColor),
         ),
         backgroundColor: ColorsSchool.primaryColor,

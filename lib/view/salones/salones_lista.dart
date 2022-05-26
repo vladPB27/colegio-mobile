@@ -1,5 +1,6 @@
 import 'package:colegio_app/model/colors.dart';
 import 'package:colegio_app/model/salon.dart';
+import 'package:colegio_app/repository/salon_repository.dart';
 import 'package:flutter/material.dart';
 
 class SalonesLista extends StatefulWidget {
@@ -12,10 +13,11 @@ class SalonesLista extends StatefulWidget {
 class _SalonesListaState extends State<SalonesLista> {
 
   late Future<List<Salon>> _salonesList;
+  var salonWebRepo = SalonWebRepository();
 
   @override
   void initState() {
-    // _salonesList =
+    _salonesList = salonWebRepo.getSalones();
     super.initState();
   }
   @override

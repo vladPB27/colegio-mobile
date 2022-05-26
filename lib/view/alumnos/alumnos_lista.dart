@@ -26,12 +26,12 @@ class _AlumnosListaState extends State<AlumnosLista> {
   @override
   void initState() {
     super.initState();
-    _alumnosList = alumnoWebRepo.getAlumnos();
-    print('LIST => $_alumnosList');
+    // _alumnosList = alumnoWebRepo.getAlumnos();
   }
 
   @override
   Widget build(BuildContext context) {
+    print('LIST ALUMNOS VIEW');
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -49,7 +49,7 @@ class _AlumnosListaState extends State<AlumnosLista> {
         ),
       ),
       // drawer: NavigationDrawerWidget(),
-      backgroundColor: ColorsSchool.secondaryColor,
+      // backgroundColor: ColorsSchool.secondaryColor,
       body: SafeArea(
         // child: SingleChildScrollView(
         child: RefreshIndicator(
@@ -57,144 +57,235 @@ class _AlumnosListaState extends State<AlumnosLista> {
           child: Column(
             children: [
               Expanded(
-                flex: 3,
                 child: Container(
-                  height: 650,
-                  color: HexColor('#e7ece6'),
-                  child: Card(
-                    child: FutureBuilder<List<Alumno>>(
-                      // future: alumnoWebRepo.getAlumnos(),
-                      future: _alumnosList,
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Container(
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        } else
-                          return ListView.builder(
-                              itemCount: snapshot.data?.length,
-                              itemBuilder: (context, i) {
-                                return GestureDetector(
-                                  onTap: () {},
-                                  child: Card(
-                                    child: ExpansionTile(
-                                      leading: CircleAvatar(
-                                        backgroundImage: AssetImage(
-                                            'assets/images/user.png'),
-                                      ),
-                                      title:
-                                          Text('${snapshot.data?[i].nombres}'),
-                                      subtitle: Text(
-                                        '${snapshot.data?[i].apellidoPaterno} ${snapshot.data?[i].apellidoMaterno}',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: ColorsSchool.secondaryColor),
-                                      ),
+                  child: FutureBuilder<List<Alumno>>(
+                    future: alumnoWebRepo.getAlumnos(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Container(
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      } else
+                        return ListView.builder(
+                            itemCount: snapshot.data?.length,
+                            itemBuilder: (context, i) {
+                              return Card(
+                                child: ExpansionTile(
+                                  trailing:
+                                  Wrap(
+                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                    children: [
+                                      IconButton(icon: Icon(Icons.more_vert_outlined) , onPressed: (){}),
+                                      Icon(Icons.arrow_drop_down)
+                                    ],
+                                  ),
+                                  leading: CircleAvatar(
+                                    backgroundImage:
+                                        AssetImage('assets/images/user.png'),
+                                  ),
+                                  title: Text('${snapshot.data?[i].nombres}'),
+                                  subtitle: Text(
+                                    '${snapshot.data?[i].apellidoPaterno} ${snapshot.data?[i].apellidoMaterno}',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: ColorsSchool.secondaryColor),
+                                  ),
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
                                       children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                            Row(
                                               children: [
-                                                Row(
-                                                  children: [
-                                                    Icon(Icons.payment),
-                                                    Text(
-                                                      '${snapshot.data?[i].dni}',
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: ColorsSchool
-                                                              .secondaryColor),
-                                                    )
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Icon(Icons.phone),
-                                                    Text(
-                                                      '${snapshot.data?[i].celular}',
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: ColorsSchool
-                                                              .secondaryColor),
-                                                    )
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Icon(Icons.home),
-                                                    Text(
-                                                      '${snapshot.data?[i].direccion}',
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: ColorsSchool
-                                                              .secondaryColor),
-                                                    )
-                                                  ],
+                                                Icon(Icons.payment),
+                                                Text(
+                                                  '${snapshot.data?[i].dni}',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: ColorsSchool
+                                                          .secondaryColor),
                                                 )
                                               ],
                                             ),
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                            builder: (_) =>
-                                                                FormAlumnos(
-                                                                    snapshot.data![
-                                                                        i])));
-                                                  },
-                                                  child: Icon(
-                                                    Icons.edit,
-                                                    color:
-                                                        ColorsSchool.primaryColor,
-                                                    size: 25,
-                                                  ),
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    exitDialog(
-                                                        snapshot.data![i].id);
-                                                    alumnoWebRepo.deleteAlumno(snapshot.data![i].id!);
-                                                    // setState(() {
-                                                    //   print('refrescando screen');
-                                                    // });
-                                                  },
-                                                  child: Icon(
-                                                    Icons.delete,
-                                                    color: Colors.red,
-                                                    size: 25,
-                                                  ),
-                                                ),
+                                                Icon(Icons.phone),
+                                                Text(
+                                                  '${snapshot.data?[i].celular}',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: ColorsSchool
+                                                          .secondaryColor),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Icon(Icons.home),
+                                                Text(
+                                                  '${snapshot.data?[i].direccion}',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: ColorsSchool
+                                                          .secondaryColor),
+                                                )
                                               ],
                                             )
                                           ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            FormAlumnos(snapshot
+                                                                .data![i])));
+                                              },
+                                              child: Icon(
+                                                Icons.edit,
+                                                color:
+                                                    ColorsSchool.primaryColor,
+                                                size: 25,
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                exitDialog(
+                                                    snapshot.data![i].id);
+                                                // alumnoWebRepo.deleteAlumno(
+                                                //     snapshot.data![i].id!);
+
+                                              },
+                                              child: Icon(
+                                                Icons.delete,
+                                                color: Colors.red,
+                                                size: 25,
+                                              ),
+                                            ),
+                                          ],
                                         )
                                       ],
-                                    ),
-                                  ),
-                                );
-                                Divider(
-                                  color: Colors.black,
-                                );
-                              });
-                      },
-                    ),
+                                    )
+                                  ],
+                                ),
+                                // Expanded(child: Icon(Icons.five_g))
+                              );
+                              Divider(
+                                color: Colors.black,
+                              );
+                            });
+                    },
                   ),
                 ),
               ),
+              buildFooterNavigation(context, ColorsSchool.primaryColor)
             ],
           ),
         ),
         // ),
       ),
-      // bottomNavigationBar: NavigationBar(),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: ColorsSchool.thirdColor,
+      //   selectedIconTheme: IconThemeData(color: ColorsSchool.fourthColor),
+      //   selectedItemColor: ColorsSchool.fourthColor,
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //         icon: Icon(Icons.arrow_back_ios_outlined), label: 'Volver'),
+      //     BottomNavigationBarItem(
+      //         icon: Icon(Icons.home_outlined), label: 'Inicio'),
+      //     BottomNavigationBarItem(
+      //         icon: Icon(Icons.add_circle_outline), label: 'Agregar')
+      //   ],
+      // ),
+    );
+  }
+
+  Container buildFooterNavigation(BuildContext context, Color color) {
+    return Container(
+      margin: EdgeInsets.zero,
+      color: ColorsSchool.fifthColor,
+      height: 65,
+      child: Row(
+        // mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios_outlined,
+                    size: 25,
+                    color: color,
+                  ),
+                  onPressed: () {},
+                ),
+                Text(
+                  'Volver',
+                  style: TextStyle(color: color, fontSize: 12),
+                )
+              ],
+            ),
+          ),
+          Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                    icon: Icon(
+                      Icons.home,
+                      size: 25,
+                      color: color,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/create_loading');
+                    }),
+                Text(
+                  'Inicio',
+                  style: TextStyle(color: color, fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.add_circle_outline,
+                    size: 25,
+                    color: color,
+                  ),
+                  onPressed: () {},
+                ),
+                Text(
+                  'Agregar',
+                  style: TextStyle(color: color, fontSize: 12),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -241,6 +332,9 @@ class _AlumnosListaState extends State<AlumnosLista> {
                             onPressed: () {
                               alumnoWebRepo.deleteAlumno(id);
                               Navigator.of(context).pop();
+                              setState(() {
+
+                              });
                             },
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -263,6 +357,8 @@ class _AlumnosListaState extends State<AlumnosLista> {
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop(false);
+                              setState(() {
+                              });
                             },
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
