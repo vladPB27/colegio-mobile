@@ -14,6 +14,7 @@ class AlumnoWebRepository implements AlumnoRepository {
       var url = Uri.parse('${Apiconstant.url}/alumnos');
       return await http.get(url).then((res) {
         var body = json.decode(res.body);
+        print(res.body);
         List<Alumno> alumnosList = [];
         for (var i = 0; i < body.length; i++) {
           alumnosList.add(Alumno.fromJson(body[i]));
@@ -28,16 +29,15 @@ class AlumnoWebRepository implements AlumnoRepository {
   @override
   Future<String> addAlumno(Alumno alumno) async {
     try {
-      print('${alumno.toJson()}');
+      print('AlUMNO ${alumno.toJson()}');
       var url = Uri.parse('${Apiconstant.url}/alumnos');
       // var result = '';
       var response = await http.post(url, body: alumno.toJson());
       print('estado: ${response.statusCode}');
-      print('body: ${response.body}');
+      // print('body: ${response.body}');
       return 'true';
     } catch (e) {
-      print('error: $e');
-      throw Exception('method POST failed');
+      throw Exception('ERROR: $e');
     }
   }
 

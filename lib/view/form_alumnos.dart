@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:colegio_app/model/alumnos.dart';
 import 'package:colegio_app/model/colors.dart';
 import 'package:colegio_app/repository/alumno_repository.dart';
@@ -5,6 +9,8 @@ import 'package:colegio_app/view/alumnos/alumnos_lista.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:developer';
 
 class FormAlumnos extends StatefulWidget {
 
@@ -16,6 +22,8 @@ class FormAlumnos extends StatefulWidget {
 }
 
 class _FormAlumnosState extends State<FormAlumnos> {
+
+  var _img64 = '';
 
   @override
   void initState() {
@@ -36,33 +44,7 @@ class _FormAlumnosState extends State<FormAlumnos> {
   final datosPadre = TextEditingController();
   final datosMadre = TextEditingController();
   final direccion = TextEditingController();
-  final String user = "";
-  final List<String> pass = []; //probando
-
-  Dio dio = new Dio();
-
-  Future addPublication() async {
-    final String pathUrl =
-        'https://us-central1-sistema-colegio-4a695.cloudfunctions.net/app/alumnos';
-    dynamic data = {
-      'nombres': nombres.text,
-      'apellidoPaterno': apPaterno.text,
-      'apellidoMaterno': apMaterno.text,
-      'fechaNacimiento': '01/01/2022',
-      'dni': nroDni.text,
-      // 'j': '',
-      // 'nombreDelaMadre': 'madre',
-      'telefonoApoderado': '996565437',
-    };
-
-    print('data: $data');
-
-    var response = await dio.post(pathUrl,
-        data: data,
-        options: Options(
-            headers: {'Content-type': 'application/json; charset=UTF-8'}));
-    return response.data;
-  }
+  // final imagen = TextEditingController();
 
   @override
   void dispose() {
@@ -77,6 +59,7 @@ class _FormAlumnosState extends State<FormAlumnos> {
     datosPadre.dispose();
     datosMadre.dispose();
     direccion.dispose();
+    // imagen.dispose();
     super.dispose();
   }
 
@@ -92,7 +75,9 @@ class _FormAlumnosState extends State<FormAlumnos> {
         email: email.text,
         datosDelPadre: '',
         datosDelaMadre: '',
-        direccion: direccion.text);
+        direccion: direccion.text,
+        imagen: _img64
+    );
     alumnoWebRepo.addAlumno(alumn);
   }
 
@@ -215,12 +200,18 @@ class _FormAlumnosState extends State<FormAlumnos> {
                     // padding: EdgeInsets.symmetric(horizontal: 65),
                     child: widgetTextField(email, 'Email', 'Ingrese email',Icons.email),
                   ),
+                  
                   Padding(
                     padding: const EdgeInsets.only(
-                        left: 50.0, right: 50.0, top: 10, bottom: 20),
+                        left: 50.0, right: 50.0, top: 10, bottom: 0),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
                     child: widgetTextField(
                         direccion, 'Dirección', 'Ingrese dirección',Icons.home),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 50.0, right: 50.0, top: 10, bottom: 10),
+                    child: buildImagePicker(),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -301,5 +292,233 @@ class _FormAlumnosState extends State<FormAlumnos> {
     );
   }
 
+  Stack buildImagePicker() {
+    final double radiusImg = MediaQuery.of(context).size.width * 0.25;
+    return Stack(
+      children: [
+        Container(
+          color: Colors.white,
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: SizedBox(
+            child: CircleAvatar(
+              radius: radiusImg,
+              backgroundColor: Colors.white,
+              child: CircleAvatar(
+                radius: radiusImg-1,
+                backgroundColor: Colors.white,
+                backgroundImage: AssetImage('assets/images/user.png'),
+                // imageReal != null
+                //     ? Image.file(
+                //   _imageReal,
+                //   fit: BoxFit.contain,
+                // ).image
+                //     : 2 > 3 != null
+                //     ? AssetImage('assets/images/user.png')
+                //     : AssetImage('assets/images/user.png'),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: CircleAvatar(
+                    backgroundColor: ColorsSchool.thirdColor,
+                    radius: 22.0,
+                    child: FlatButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                        // side: BorderSide(color: Colors.white),
+                      ),
+                      color: HexColor('#006059'),
+                      child: Icon(
+                        Icons.edit_outlined,
+                        size: 15.0,
+                        color: Colors.white,
+                      ),
+                      onPressed: () => _imagePickerDialog(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _image1 = "";
+  late File _image;
+  String? _icon;
+  final picker = ImagePicker();
+  late PickedFile imageReal;
+
+  Future getFromGallery() async {
+    // final userInfo = Provider.of<User>(context, listen: false);
+
+    imageReal = (await picker.getImage(source: ImageSource.gallery))!;
+    setState(() {
+    print('IMG 64 1: $_img64');
+    if (imageReal != null) {
+      _image1 = imageReal.path;
+      _image = File(imageReal.path);
+      // print('img selected path: ${json.encode(_image1)}');
+      final bytes = File(imageReal.path).readAsBytesSync();
+      _img64 = base64Encode(bytes);
+      // print('''IMG 64: $_img64''');
+      // debugPrint('debug: $_img64');
+      // log('log: $_img64');
+      // log('dev: $_img64');
+      print('longitud: ${_img64.length}');
+      // userInfo.image = _img64;
+    } else {
+      print('No image selected.');
+    }
+    });
+  }
+
+  // Future _getFromCamera() async {
+  //   final userInfo = Provider.of<User>(context, listen: false);
+  //
+  //   userInfo.imageReal = await picker.getImage(source: ImageSource.camera);
+  //
+  //   if (userInfo.imageReal != null) {
+  //     _image = File(userInfo.imageReal.path);
+  //     final bytes = File(userInfo.imageReal.path).readAsBytesSync();
+  //     String _img64Cam = base64Encode(bytes);
+  //     userInfo.image = _img64Cam;
+  //   }
+  // }
+
+  _imagePickerDialog() {
+    // final userInfo = Provider.of<User>(context, listen: false);
+    // final meeting = Provider.of<Meeting>(context, listen: false);
+    final double heightDialog = MediaQuery.of(context).size.height * 0.6;
+
+    showGeneralDialog(
+        context: context,
+        barrierDismissible: true,
+        barrierLabel:
+        MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        barrierColor: Colors.black45,
+        transitionDuration: const Duration(milliseconds: 200),
+        pageBuilder: (BuildContext buildContext, Animation animation,
+            Animation secondaryAnimation) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: heightDialog),
+            child: Container(
+              padding: EdgeInsets.all(10),
+              color: HexColor('#003333').withOpacity(0.7),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SafeArea(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: Column(
+                              children: [
+                                GestureDetector(
+                                  child: Container(
+                                    height: 70,
+                                    width: 90,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: ColorsSchool.thirdColor),
+                                    child: Icon(
+                                      Icons.image_outlined,
+                                      color: Colors.white,
+                                      size: 40,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    getFromGallery();
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                Text(
+                                  'Gallery',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                      decoration: TextDecoration.none),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Column(
+                              children: [
+                                GestureDetector(
+                                  child: Container(
+                                    height: 70,
+                                    width: 90,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: ColorsSchool.primaryColor),
+                                    child: Icon(
+                                      Icons.camera_alt_outlined,
+                                      color: Colors.white,
+                                      size: 40,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    // _getFromCamera();
+                                    // Navigator.of(context).pop();
+                                  },
+                                ),
+                                Text(
+                                  "Camera",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      decoration: TextDecoration.none),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10.0, right: 10, bottom: 10, top: 10),
+                      // child: Swiper(
+                      //   pagination: SwiperControl(color: Colors.white),
+                      //   itemCount: oIcon.iconMeetingList.length,
+                      //   itemBuilder: (context, index) {
+                      //     return GestureDetector(
+                      //       onTap: () {
+                      //         setState(() {
+                      //           userInfo.icon = oIcon.iconMeetingList[index];
+                      //           userInfo.imageReal = null;
+                      //           userInfo.image = null;
+                      //           meeting.image = oIcon.iconMeetingList[index];
+                      //           Navigator.of(context).pop();
+                      //         });
+                      //       },
+                      //       child: Container(
+                      //         decoration: BoxDecoration(
+                      //           shape: BoxShape.circle,
+                      //           image: DecorationImage(
+                      //             fit: BoxFit.contain,
+                      //             image: AssetImage(oIcon.iconMeetingList[index]),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     );
+                      //   },
+                      // ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
 
 }

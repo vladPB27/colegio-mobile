@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:colegio_app/model/alumnos.dart';
@@ -81,8 +82,11 @@ class _AlumnosListaState extends State<AlumnosLista> {
                                     ],
                                   ),
                                   leading: CircleAvatar(
-                                    backgroundImage:
-                                        AssetImage('assets/images/user.png'),
+                                    backgroundImage: 
+                                    // snapshot.data?[i].imagen == 'dd' ?
+                                    // AssetImage('assets/images/user.png'): AssetImage('assets/images/user.png'),
+                                    (snapshot.data?[i].imagen != null) ? (MemoryImage(base64Decode('${snapshot.data?[i].imagen}'))) :
+                                    AssetImage('assets/images/user.png') as ImageProvider
                                   ),
                                   title: Text('${snapshot.data?[i].nombres}'),
                                   subtitle: Text(

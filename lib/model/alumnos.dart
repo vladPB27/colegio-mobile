@@ -11,6 +11,7 @@ class Alumno {
   String? datosDelPadre;
   String? datosDelaMadre;
   String? direccion;
+  String? imagen;
 
   Alumno(
       {
@@ -25,7 +26,9 @@ class Alumno {
         this.email,
         this.datosDelPadre,
         this.datosDelaMadre,
-        this.direccion});
+        this.direccion,
+        this.imagen
+      });
 
   Alumno.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -40,6 +43,7 @@ class Alumno {
     datosDelPadre = json['datosDelPadre'];
     datosDelaMadre = json['datosDelaMadre'];
     direccion = json['direccion'];
+    imagen = json['imagen'];
   }
 
   Map<String, dynamic> toJson() {
@@ -56,6 +60,7 @@ class Alumno {
     data['datosDelPadre'] = this.datosDelPadre;
     data['datosDelaMadre'] = this.datosDelaMadre;
     data['direccion'] = this.direccion;
+    data['imagen'] = this.imagen;
     return data;
   }
 }
