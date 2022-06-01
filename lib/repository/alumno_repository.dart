@@ -14,7 +14,7 @@ class AlumnoWebRepository implements AlumnoRepository {
       var url = Uri.parse('${Apiconstant.url}/alumnos');
       return await http.get(url).then((res) {
         var body = json.decode(res.body);
-        print(res.body);
+        // print(res.body);
         List<Alumno> alumnosList = [];
         for (var i = 0; i < body.length; i++) {
           alumnosList.add(Alumno.fromJson(body[i]));

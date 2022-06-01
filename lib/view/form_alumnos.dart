@@ -2,15 +2,18 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:colegio_app/api/api_constant.dart';
 import 'package:colegio_app/model/alumnos.dart';
 import 'package:colegio_app/model/colors.dart';
 import 'package:colegio_app/repository/alumno_repository.dart';
 import 'package:colegio_app/view/alumnos/alumnos_lista.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:developer';
+import 'package:http/http.dart' as http;
 
 class FormAlumnos extends StatefulWidget {
 
@@ -24,6 +27,7 @@ class FormAlumnos extends StatefulWidget {
 class _FormAlumnosState extends State<FormAlumnos> {
 
   var _img64 = '';
+  File? _otherImg;
 
   @override
   void initState() {
@@ -250,7 +254,8 @@ class _FormAlumnosState extends State<FormAlumnos> {
                             if(widget.dataAlumno!=null){
                               actualizar();
                             }else{
-                              agregar();
+                              _uploadTestImg();
+                              // agregar();
                             }
                             setState(() {
 
@@ -308,7 +313,11 @@ class _FormAlumnosState extends State<FormAlumnos> {
               child: CircleAvatar(
                 radius: radiusImg-1,
                 backgroundColor: Colors.white,
-                backgroundImage: AssetImage('assets/images/user.png'),
+                backgroundImage:
+                // AssetImage('assets/images/user.png'),
+                _otherImg == null? AssetImage('assets/images/user.png'):
+                Image.file(_otherImg!,fit: BoxFit.contain).image,
+
                 // imageReal != null
                 //     ? Image.file(
                 //   _imageReal,
@@ -333,7 +342,9 @@ class _FormAlumnosState extends State<FormAlumnos> {
                         size: 15.0,
                         color: Colors.white,
                       ),
-                      onPressed: () => _imagePickerDialog(),
+                      onPressed: () => _imageUpload()
+                          // _uploadTestImg(),
+                          // _imagePickerDialog(),
                     ),
                   ),
                 ),
@@ -356,23 +367,59 @@ class _FormAlumnosState extends State<FormAlumnos> {
 
     imageReal = (await picker.getImage(source: ImageSource.gallery))!;
     setState(() {
-    print('IMG 64 1: $_img64');
     if (imageReal != null) {
       _image1 = imageReal.path;
       _image = File(imageReal.path);
       // print('img selected path: ${json.encode(_image1)}');
       final bytes = File(imageReal.path).readAsBytesSync();
-      _img64 = base64Encode(bytes);
+      //TODO base64
+      // _img64 = base64Encode(bytes);
       // print('''IMG 64: $_img64''');
       // debugPrint('debug: $_img64');
       // log('log: $_img64');
       // log('dev: $_img64');
+      //TODO base64url
+      _img64 = base64Url.encode(bytes);
+      log('dev: $_img64');
       print('longitud: ${_img64.length}');
       // userInfo.image = _img64;
     } else {
       print('No image selected.');
     }
     });
+  }
+
+
+  Future _imageUpload() async{
+    var image = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _otherImg = File(image!.path);
+      print('IMG: , ${_otherImg!.path}');
+    });
+  }
+
+  Future _uploadTestImg() async{
+    var stream = new http.ByteStream(_otherImg!.openRead());
+    stream.cast();
+    var length = await _otherImg!.length();
+    var request = http.MultipartRequest('POST',Uri.parse('${Apiconstant.url}/alumnos'));
+    request.fields['nombres'] = "test";
+    request.fields['apellidoPaterno'] = "test";
+    request.fields['apellidoMaterno'] = "test";
+    request.fields['sexo'] = "m";
+    request.fields['dni'] = "test123";
+    request.fields['fechaNacimiento'] = "123";
+    // request.fields['image'] = "img123";
+
+    var picture = new http.MultipartFile('image', stream, length);
+    // var picture = http.MultipartFile.fromBytes('image', (await rootBundle.load('assets/images/form.png')).buffer.asUint8List(),
+    //     filename: 'form.png');
+    request.files.add(picture);
+    var response = await request.send();
+    print('STATUS: ${response.statusCode}');
+    // var responseData = await response.stream.toBytes();
+    // var result = String.fromCharCodes(responseData);
+    // print('resultL: $result');
   }
 
   // Future _getFromCamera() async {
@@ -387,6 +434,7 @@ class _FormAlumnosState extends State<FormAlumnos> {
   //     userInfo.image = _img64Cam;
   //   }
   // }
+
 
   _imagePickerDialog() {
     // final userInfo = Provider.of<User>(context, listen: false);
