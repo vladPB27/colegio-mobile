@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 // import 'dart:ffi';
 //git push --force
 
@@ -74,20 +75,23 @@ class _AlumnosListaState extends State<AlumnosLista> {
                             itemBuilder: (context, i) {
                               return Card(
                                 child: ExpansionTile(
-                                  trailing:
-                                  Wrap(
-                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                  trailing: Wrap(
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
                                     children: [
-                                      IconButton(icon: Icon(Icons.more_vert_outlined) , onPressed: (){}),
+                                      IconButton(
+                                          icon: Icon(Icons.more_vert_outlined),
+                                          onPressed: () {}),
                                       Icon(Icons.arrow_drop_down)
                                     ],
                                   ),
                                   leading: CircleAvatar(
-                                    backgroundImage:
-                                    AssetImage('assets/images/user.png')
-                                    // (snapshot.data?[i].imagen != null) ? (MemoryImage(base64Decode('${snapshot.data?[i].imagen}'))) :
-                                    // AssetImage('assets/images/user.png') as ImageProvider
-                                  ),
+                                      backgroundImage:
+                                          // AssetImage('assets/images/user.png')
+                                          (snapshot.data?[i].imagen == null ||
+                                                  snapshot.data?[i].imagen == "")
+                                              ? AssetImage('assets/images/user.png') as ImageProvider
+                                              : NetworkImage('${snapshot.data?[i].imagen}')),
                                   title: Text('${snapshot.data?[i].nombres}'),
                                   subtitle: Text(
                                     '${snapshot.data?[i].apellidoPaterno} ${snapshot.data?[i].apellidoMaterno}',
@@ -167,7 +171,6 @@ class _AlumnosListaState extends State<AlumnosLista> {
                                                     snapshot.data![i].id);
                                                 // alumnoWebRepo.deleteAlumno(
                                                 //     snapshot.data![i].id!);
-
                                               },
                                               child: Icon(
                                                 Icons.delete,
@@ -279,8 +282,8 @@ class _AlumnosListaState extends State<AlumnosLista> {
                     color: color,
                   ),
                   onPressed: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (_) => FormAlumnos(null)));
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => FormAlumnos(null)));
                   },
                 ),
                 Text(
@@ -338,9 +341,7 @@ class _AlumnosListaState extends State<AlumnosLista> {
                             onPressed: () {
                               alumnoWebRepo.deleteAlumno(id);
                               Navigator.of(context).pop();
-                              setState(() {
-
-                              });
+                              setState(() {});
                             },
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -363,8 +364,7 @@ class _AlumnosListaState extends State<AlumnosLista> {
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop(false);
-                              setState(() {
-                              });
+                              setState(() {});
                             },
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(

@@ -31,6 +31,9 @@ class _FormAlumnosState extends State<FormAlumnos> {
   final storage = Storage();
   var _img64 = '';
   File? _otherImg;
+  String? _urlImage;
+  String? _filePath;
+  String? _fileName;
 
   @override
   void initState() {
@@ -70,25 +73,33 @@ class _FormAlumnosState extends State<FormAlumnos> {
     super.dispose();
   }
 
-  agregar() async{
-    Alumno alumn = Alumno(
-        nombres: nombres.text,
-        apellidoPaterno: apPaterno.text,
-        apellidoMaterno: apMaterno.text,
-        sexo: sexo.text,
-        dni: nroDni.text,
-        fechaNacimiento: fechaNacimiento.text,
-        celular: telefono.text,
-        email: email.text,
-        datosDelPadre: '',
-        datosDelaMadre: '',
-        direccion: direccion.text,
-        imagen: _img64
-    );
-    alumnoWebRepo.addAlumno(alumn);
+  Future addAlumn() async{
+    try {
+      await storage.uploadFile(_filePath!, _fileName!).then((value) => print('file uploaded'));
+      _urlImage = await storage.downloadURL(_fileName!);
+      print('URl 3: $_urlImage');
+
+      Alumno alumn = Alumno(
+          nombres: nombres.text,
+          apellidoPaterno: apPaterno.text,
+          apellidoMaterno: apMaterno.text,
+          sexo: sexo.text,
+          dni: nroDni.text,
+          fechaNacimiento: fechaNacimiento.text,
+          celular: telefono.text,
+          email: email.text,
+          datosDelPadre: '',
+          datosDelaMadre: '',
+          direccion: direccion.text,
+          imagen: _urlImage
+      );
+      alumnoWebRepo.addAlumno(alumn);
+    }catch(e){
+      throw Exception(e);
+    }
   }
 
-  actualizar() async{
+  updateAlumn() async{
     Alumno alumn = Alumno(
         id: widget.dataAlumno!.id,
         nombres: nombres.text,
@@ -254,10 +265,9 @@ class _FormAlumnosState extends State<FormAlumnos> {
                         child: FlatButton(
                           onPressed: () async {
                             if(widget.dataAlumno!=null){
-                              actualizar();
+                              updateAlumn();
                             }else{
-                              _uploadTestImg();
-                              // agregar();
+                              addAlumn();
                             }
                             setState(() {
 
@@ -356,42 +366,6 @@ class _FormAlumnosState extends State<FormAlumnos> {
   final picker = ImagePicker();
   late PickedFile imageReal;
 
-  Future getFromGallery() async {
-    // final userInfo = Provider.of<User>(context, listen: false);
-
-    imageReal = (await picker.getImage(source: ImageSource.gallery))!;
-    setState(() {
-    if (imageReal != null) {
-      _image1 = imageReal.path;
-      _image = File(imageReal.path);
-      // print('img selected path: ${json.encode(_image1)}');
-      final bytes = File(imageReal.path).readAsBytesSync();
-      //TODO base64
-      // _img64 = base64Encode(bytes);
-      // print('''IMG 64: $_img64''');
-      // debugPrint('debug: $_img64');
-      // log('log: $_img64');
-      // log('dev: $_img64');
-      //TODO base64url
-      _img64 = base64Url.encode(bytes);
-      log('dev: $_img64');
-      print('longitud: ${_img64.length}');
-      // userInfo.image = _img64;
-    } else {
-      print('No image selected.');
-    }
-    });
-  }
-
-
-  Future _imageUpload() async{
-    var image = await picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _otherImg = File(image!.path);
-      print('IMG: , ${_otherImg!.path}');
-    });
-  }
-
   Future _uploadFile() async{
     final results = await FilePicker.platform.pickFiles(
       allowMultiple: false,
@@ -404,12 +378,12 @@ class _FormAlumnosState extends State<FormAlumnos> {
       );
       return null;
     }else{
-      final path = results.files.single.path;
-      final fileName = results.files.single.name;
-      //TODO por mientras
-      storage.uploadFile(path!, fileName).then((value) => print('file uploaded'));
+      _filePath = results.files.single.path;
+      _fileName = results.files.single.name;
+      
       setState((){
-        _otherImg = File(path);
+        _otherImg = File(_filePath!);
+        // _urlImage = url;
       });
     }
 
@@ -429,14 +403,36 @@ class _FormAlumnosState extends State<FormAlumnos> {
     // request.fields['image'] = "img123";
 
     var picture = new http.MultipartFile('image', stream, length);
-    // var picture = http.MultipartFile.fromBytes('image', (await rootBundle.load('assets/images/form.png')).buffer.asUint8List(),
-    //     filename: 'form.png');
     request.files.add(picture);
     var response = await request.send();
     print('STATUS: ${response.statusCode}');
-    // var responseData = await response.stream.toBytes();
-    // var result = String.fromCharCodes(responseData);
-    // print('resultL: $result');
+  }
+
+  Future getFromGallery() async {
+    // final userInfo = Provider.of<User>(context, listen: false);
+
+    imageReal = (await picker.getImage(source: ImageSource.gallery))!;
+    setState(() {
+      if (imageReal != null) {
+        _image1 = imageReal.path;
+        _image = File(imageReal.path);
+        // print('img selected path: ${json.encode(_image1)}');
+        final bytes = File(imageReal.path).readAsBytesSync();
+        //TODO base64
+        _img64 = base64Encode(bytes);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+
+  Future _imageUpload() async{
+    var image = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _otherImg = File(image!.path);
+      print('IMG: , ${_otherImg!.path}');
+    });
   }
 
   // Future _getFromCamera() async {
