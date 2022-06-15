@@ -8,12 +8,12 @@
         "source": "/home/vlad/AndroidStudioProjects/colegioApp/android/app/src/main/res/drawable/launch_background.xml"
     },
     {
-        "merged": "/home/vlad/AndroidStudioProjects/colegioApp/build/app/intermediates/res/merged/debug/mipmap-mdpi_ic_launcher.png.flat",
-        "source": "/home/vlad/AndroidStudioProjects/colegioApp/android/app/src/main/res/mipmap-mdpi/ic_launcher.png"
-    },
-    {
         "merged": "/home/vlad/AndroidStudioProjects/colegioApp/build/app/intermediates/res/merged/debug/mipmap-xxxhdpi_ic_launcher.png.flat",
         "source": "/home/vlad/AndroidStudioProjects/colegioApp/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/vlad/AndroidStudioProjects/colegioApp/build/app/intermediates/res/merged/debug/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "/home/vlad/AndroidStudioProjects/colegioApp/android/app/src/main/res/mipmap-mdpi/ic_launcher.png"
     },
     {
         "merged": "/home/vlad/AndroidStudioProjects/colegioApp/build/app/intermediates/res/merged/debug/mipmap-xxhdpi_ic_launcher.png.flat",

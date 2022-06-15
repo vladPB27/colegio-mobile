@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "700114939083",
+    "project_id": "sistema-colegio-4a695",
+    "storage_bucket": "sistema-colegio-4a695.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700114939083:android:de620f4a046d289d927f4e",
+        "android_client_info": {
+          "package_name": "com.example.colegio_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "700114939083-5f3c1in4sm5ts2in9rs2id6m0tkekaqe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjpB6MARIswX3gmQ3Rrf0wImQCPicBkcs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "700114939083-5f3c1in4sm5ts2in9rs2id6m0tkekaqe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

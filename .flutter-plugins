@@ -1,4 +1,9 @@
 # This is a generated file; do not edit or check into version control.
+file_picker=/home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-4.6.1/
+firebase_core=/home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.17.1/
+firebase_core_web=/home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.6.4/
+firebase_storage=/home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage-10.2.17/
+firebase_storage_web=/home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage_web-3.2.16/
 flutter_plugin_android_lifecycle=/home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.6/
 hexcolor=/home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/hexcolor-2.0.5/
 image_picker=/home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.8.4+1/

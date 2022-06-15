@@ -6,8 +6,10 @@ import 'package:colegio_app/api/api_constant.dart';
 import 'package:colegio_app/model/alumnos.dart';
 import 'package:colegio_app/model/colors.dart';
 import 'package:colegio_app/repository/alumno_repository.dart';
+import 'package:colegio_app/repository/storage_repository.dart';
 import 'package:colegio_app/view/alumnos/alumnos_lista.dart';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -26,6 +28,7 @@ class FormAlumnos extends StatefulWidget {
 
 class _FormAlumnosState extends State<FormAlumnos> {
 
+  final storage = Storage();
   var _img64 = '';
   File? _otherImg;
 
@@ -121,6 +124,7 @@ class _FormAlumnosState extends State<FormAlumnos> {
   }
 
   Widget build(BuildContext context) {
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -141,9 +145,6 @@ class _FormAlumnosState extends State<FormAlumnos> {
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
             colors: [
-              // Colors.black,
-              // Colors.black54,
-              // Colors.black26,
               Colors.white30,
               Colors.white10,
             ],
@@ -152,6 +153,11 @@ class _FormAlumnosState extends State<FormAlumnos> {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 50.0, right: 50.0, top: 10, bottom: 0),
+                    child: buildImagePicker(),
+                  ),
                   Padding(
                     // padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
                     padding: EdgeInsets.only(left: 50.0, right: 50.0, top: 10, bottom: 0),
@@ -207,16 +213,12 @@ class _FormAlumnosState extends State<FormAlumnos> {
                   
                   Padding(
                     padding: const EdgeInsets.only(
-                        left: 50.0, right: 50.0, top: 10, bottom: 0),
+                        left: 50.0, right: 50.0, top: 10, bottom: 10),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
                     child: widgetTextField(
                         direccion, 'Dirección', 'Ingrese dirección',Icons.home),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 50.0, right: 50.0, top: 10, bottom: 10),
-                    child: buildImagePicker(),
-                  ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -298,7 +300,7 @@ class _FormAlumnosState extends State<FormAlumnos> {
   }
 
   Stack buildImagePicker() {
-    final double radiusImg = MediaQuery.of(context).size.width * 0.25;
+    final double radiusImg = MediaQuery.of(context).size.width * 0.20;
     return Stack(
       children: [
         Container(
@@ -314,18 +316,9 @@ class _FormAlumnosState extends State<FormAlumnos> {
                 radius: radiusImg-1,
                 backgroundColor: Colors.white,
                 backgroundImage:
-                // AssetImage('assets/images/user.png'),
                 _otherImg == null? AssetImage('assets/images/user.png'):
                 Image.file(_otherImg!,fit: BoxFit.contain).image,
 
-                // imageReal != null
-                //     ? Image.file(
-                //   _imageReal,
-                //   fit: BoxFit.contain,
-                // ).image
-                //     : 2 > 3 != null
-                //     ? AssetImage('assets/images/user.png')
-                //     : AssetImage('assets/images/user.png'),
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: CircleAvatar(
@@ -342,7 +335,8 @@ class _FormAlumnosState extends State<FormAlumnos> {
                         size: 15.0,
                         color: Colors.white,
                       ),
-                      onPressed: () => _imageUpload()
+                      onPressed: () => _uploadFile()
+                          // _imageUpload()
                           // _uploadTestImg(),
                           // _imagePickerDialog(),
                     ),
@@ -396,6 +390,29 @@ class _FormAlumnosState extends State<FormAlumnos> {
       _otherImg = File(image!.path);
       print('IMG: , ${_otherImg!.path}');
     });
+  }
+
+  Future _uploadFile() async{
+    final results = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['png','jpg']
+    );
+    if(results == null){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('no file selected'))
+      );
+      return null;
+    }else{
+      final path = results.files.single.path;
+      final fileName = results.files.single.name;
+      //TODO por mientras
+      storage.uploadFile(path!, fileName).then((value) => print('file uploaded'));
+      setState((){
+        _otherImg = File(path);
+      });
+    }
+
   }
 
   Future _uploadTestImg() async{

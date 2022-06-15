@@ -62,6 +62,54 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "ffi",
+      "rootUri": "file:///home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "file_picker",
+      "rootUri": "file:///home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-4.6.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "firebase_core",
+      "rootUri": "file:///home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.17.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_core_platform_interface",
+      "rootUri": "file:///home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_platform_interface-4.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_core_web",
+      "rootUri": "file:///home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.6.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_storage",
+      "rootUri": "file:///home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage-10.2.17",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_storage_platform_interface",
+      "rootUri": "file:///home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage_platform_interface-4.1.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_storage_web",
+      "rootUri": "file:///home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage_web-3.2.16",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///home/vlad/snap/flutter/common/flutter/packages/flutter",
       "packageUri": "lib/",
@@ -218,13 +266,19 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "win32",
+      "rootUri": "file:///home/vlad/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.6.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "colegio_app",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2022-06-15T16:57:50.470199Z",
+  "generated": "2022-06-15T17:36:09.939280Z",
   "generator": "pub",
   "generatorVersion": "2.17.3"
 }
