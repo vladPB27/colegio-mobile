@@ -18,22 +18,22 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 
 class FormAlumnos extends StatefulWidget {
-
   final Alumno? dataAlumno;
-  const FormAlumnos(this.dataAlumno,{Key? key}) : super(key: key);
+
+  const FormAlumnos(this.dataAlumno, {Key? key}) : super(key: key);
 
   @override
   _FormAlumnosState createState() => _FormAlumnosState();
 }
 
 class _FormAlumnosState extends State<FormAlumnos> {
-
   final storage = Storage();
   var _img64 = '';
   File? _otherImg;
   String? _urlImage;
   String? _filePath;
   String? _fileName;
+  DateTime _currentDate = DateTime.now();
 
   @override
   void initState() {
@@ -41,6 +41,7 @@ class _FormAlumnosState extends State<FormAlumnos> {
 
     super.initState();
   }
+
   var alumnoWebRepo = AlumnoWebRepository();
 
   TextEditingController nombres = TextEditingController();
@@ -54,6 +55,7 @@ class _FormAlumnosState extends State<FormAlumnos> {
   final datosPadre = TextEditingController();
   final datosMadre = TextEditingController();
   final direccion = TextEditingController();
+
   // final imagen = TextEditingController();
 
   @override
@@ -73,9 +75,11 @@ class _FormAlumnosState extends State<FormAlumnos> {
     super.dispose();
   }
 
-  Future addAlumn() async{
+  Future addAlumn() async {
     try {
-      await storage.uploadFile(_filePath!, _fileName!).then((value) => print('file uploaded'));
+      await storage
+          .uploadFile(_filePath!, _fileName!)
+          .then((value) => print('file uploaded'));
       _urlImage = await storage.downloadURL(_fileName!);
       print('URl 3: $_urlImage');
 
@@ -91,15 +95,14 @@ class _FormAlumnosState extends State<FormAlumnos> {
           datosDelPadre: '',
           datosDelaMadre: '',
           direccion: direccion.text,
-          imagen: _urlImage
-      );
+          imagen: _urlImage);
       alumnoWebRepo.addAlumno(alumn);
-    }catch(e){
+    } catch (e) {
       throw Exception(e);
     }
   }
 
-  updateAlumn() async{
+  updateAlumn() async {
     Alumno alumn = Alumno(
         id: widget.dataAlumno!.id,
         nombres: nombres.text,
@@ -117,8 +120,8 @@ class _FormAlumnosState extends State<FormAlumnos> {
     alumnoWebRepo.updateAlumno(alumn);
   }
 
-  getDataUpdateStudent(){
-    if(widget.dataAlumno != null){
+  getDataUpdateStudent() {
+    if (widget.dataAlumno != null) {
       print('DATOS: ${widget.dataAlumno!.toJson()}');
       nombres.text = '${widget.dataAlumno!.nombres}';
       apPaterno.text = '${widget.dataAlumno!.apellidoPaterno}';
@@ -129,21 +132,32 @@ class _FormAlumnosState extends State<FormAlumnos> {
       telefono.text = '${widget.dataAlumno!.celular}';
       email.text = '${widget.dataAlumno!.email}';
       direccion.text = '${widget.dataAlumno!.direccion}';
-    }else{
+    } else {
       print('NULL');
+    }
+  }
+
+  Future _selectDate(BuildContext context) async {
+    print('date: $_currentDate');
+    DateTime? _datePicker = await showDatePicker(context: context, initialDate: _currentDate, firstDate: DateTime(_currentDate.year-30), lastDate: DateTime(_currentDate.year+1));
+    if(_datePicker !=null && _datePicker!=_currentDate){
+      setState((){
+        _currentDate = _datePicker;
+        fechaNacimiento.text = '${_datePicker.day}/${_datePicker.month}/${_datePicker.year}';
+      });
+      print('date 2: $_currentDate');
     }
   }
 
   Widget build(BuildContext context) {
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    String title = 'Date Picker';
+      return Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: Text(
             'Agregar Alumno',
-            style: TextStyle(color: ColorsSchool.fourthColor,fontSize: 25),
+            style: TextStyle(color: ColorsSchool.fourthColor, fontSize: 25),
           ),
           backgroundColor: ColorsSchool.primaryColor,
         ),
@@ -171,65 +185,87 @@ class _FormAlumnosState extends State<FormAlumnos> {
                   ),
                   Padding(
                     // padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
-                    padding: EdgeInsets.only(left: 50.0, right: 50.0, top: 10, bottom: 0),
-                    child:
-                        widgetTextField(nombres, 'nombres', 'Ingrese nombre',Icons.perm_identity_outlined),
+                    padding: EdgeInsets.only(
+                        left: 50.0, right: 50.0, top: 10, bottom: 0),
+                    child: widgetTextField(nombres, 'nombres', 'Ingrese nombre',
+                        Icons.perm_identity_outlined),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 50.0, right: 50.0, top: 10, bottom: 0),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
                     child: widgetTextField(
-                        apPaterno, 'A. Paterno', 'Ingrese apellido paterno',Icons.perm_identity_outlined),
+                        apPaterno,
+                        'A. Paterno',
+                        'Ingrese apellido paterno',
+                        Icons.perm_identity_outlined),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 50.0, right: 50.0, top: 10, bottom: 0),
+                    // padding: EdgeInsets.symmetric(horizontal: 65),
+                    child: widgetTextField(apMaterno, 'A. Materno',
+                        'Ingrese nombre', Icons.perm_identity_outlined),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 50.0, right: 50.0, top: 10, bottom: 0),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
                     child: widgetTextField(
-                        apMaterno, 'A. Materno', 'Ingrese nombre',Icons.perm_identity_outlined),
+                        sexo, 'genero', 'Ingrese nombre', Icons.wc_outlined),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 50.0, right: 50.0, top: 10, bottom: 0),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
-                    child: widgetTextField(sexo, 'genero', 'Ingrese nombre',Icons.wc_outlined),
+                    child: widgetTextField(nroDni, 'DNI', 'Ingrese nombre',
+                        Icons.call_to_action_rounded),
                   ),
+                  Padding(
+                      padding: const EdgeInsets.only(
+                          left: 50.0, right: 50.0, top: 10, bottom: 0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              flex: 5,
+                              child: widgetTextField(
+                                  fechaNacimiento,
+                                  'Fecha Ncto.',
+                                  'Ingrese nombre',
+                                  Icons.date_range_outlined)),
+                          Expanded(
+                              flex: 1,
+                              child: TextButton(
+                                  onPressed: () {},
+                                  child: IconButton(
+                                    icon: Icon(Icons.date_range_outlined),
+                                    onPressed: () {
+                                      _selectDate(context);
+                                    },
+                                  ))),
+                        ],
+                      )),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 50.0, right: 50.0, top: 10, bottom: 0),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
-                    child: widgetTextField(nroDni, 'DNI', 'Ingrese nombre',Icons.call_to_action_rounded),
+                    child: widgetTextField(
+                        telefono, 'Teléfono', 'Ingrese teléfono', Icons.phone),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 50.0, right: 50.0, top: 10, bottom: 0),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
                     child: widgetTextField(
-                        fechaNacimiento, 'Fecha Ncto.', 'Ingrese nombre',Icons.date_range_outlined),
+                        email, 'Email', 'Ingrese email', Icons.email),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 50.0, right: 50.0, top: 10, bottom: 0),
-                    // padding: EdgeInsets.symmetric(horizontal: 65),
-                    child:
-                        widgetTextField(telefono, 'Teléfono', 'Ingrese teléfono',Icons.phone),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 50.0, right: 50.0, top: 10, bottom: 0),
-                    // padding: EdgeInsets.symmetric(horizontal: 65),
-                    child: widgetTextField(email, 'Email', 'Ingrese email',Icons.email),
-                  ),
-                  
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 50.0, right: 50.0, top: 10, bottom: 10),
                     // padding: EdgeInsets.symmetric(horizontal: 65),
-                    child: widgetTextField(
-                        direccion, 'Dirección', 'Ingrese dirección',Icons.home),
+                    child: widgetTextField(direccion, 'Dirección',
+                        'Ingrese dirección', Icons.home),
                   ),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -241,20 +277,22 @@ class _FormAlumnosState extends State<FormAlumnos> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: TextButton(
-                          onPressed: (){
+                          onPressed: () {
                             // Navigator.of(context).pop();
-                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> AlumnosLista()));
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (_) => AlumnosLista()));
                             // setState(() {
                             //
                             // });
                           },
                           child: Text(
                             'Cancelar',
-                            style: TextStyle(color: ColorsSchool.fourthColor, fontSize: 15),
+                            style: TextStyle(
+                                color: ColorsSchool.fourthColor, fontSize: 15),
                           ),
                         ),
                       ),
-
                       Container(
                         height: 40,
                         width: 150,
@@ -264,22 +302,30 @@ class _FormAlumnosState extends State<FormAlumnos> {
                         ),
                         child: FlatButton(
                           onPressed: () async {
-                            if(widget.dataAlumno!=null){
+                            if (widget.dataAlumno != null) {
                               updateAlumn();
-                            }else{
+                            } else {
                               addAlumn();
                             }
-                            setState(() {
-
-                            });
+                            setState(() {});
                             //TODO si se agrego correctamente
-                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> AlumnosLista()));
-
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (_) => AlumnosLista()));
                           },
-                          child: widget.dataAlumno !=null? Text(
-                            'Actualizar',
-                            style: TextStyle(color: ColorsSchool.fourthColor, fontSize: 15),
-                          ): Text('Agregar',style: TextStyle(color: ColorsSchool.fourthColor, fontSize: 15),),
+                          child: widget.dataAlumno != null
+                              ? Text(
+                                  'Actualizar',
+                                  style: TextStyle(
+                                      color: ColorsSchool.fourthColor,
+                                      fontSize: 15),
+                                )
+                              : Text(
+                                  'Agregar',
+                                  style: TextStyle(
+                                      color: ColorsSchool.fourthColor,
+                                      fontSize: 15),
+                                ),
                         ),
                       ),
                     ],
@@ -293,19 +339,21 @@ class _FormAlumnosState extends State<FormAlumnos> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
-  TextField widgetTextField(controller, String label, String placeholder,IconData icono) {
+  TextField widgetTextField(
+      controller, String label, String placeholder, IconData icono) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
           // border: OutlineInputBorder(),
           labelText: label,
           hintText: placeholder,
-          icon: Icon(icono,color: ColorsSchool.primaryColor,)
-      ),
+          icon: Icon(
+            icono,
+            color: ColorsSchool.primaryColor,
+          )),
     );
   }
 
@@ -323,33 +371,32 @@ class _FormAlumnosState extends State<FormAlumnos> {
               radius: radiusImg,
               backgroundColor: Colors.white,
               child: CircleAvatar(
-                radius: radiusImg-1,
+                radius: radiusImg - 1,
                 backgroundColor: Colors.white,
-                backgroundImage:
-                _otherImg == null? AssetImage('assets/images/user.png'):
-                Image.file(_otherImg!,fit: BoxFit.contain).image,
-
+                backgroundImage: _otherImg == null
+                    ? AssetImage('assets/images/user.png')
+                    : Image.file(_otherImg!, fit: BoxFit.contain).image,
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: CircleAvatar(
                     backgroundColor: ColorsSchool.thirdColor,
                     radius: 22.0,
                     child: FlatButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100),
-                        // side: BorderSide(color: Colors.white),
-                      ),
-                      color: HexColor('#006059'),
-                      child: Icon(
-                        Icons.edit_outlined,
-                        size: 15.0,
-                        color: Colors.white,
-                      ),
-                      onPressed: () => _uploadFile()
-                          // _imageUpload()
-                          // _uploadTestImg(),
-                          // _imagePickerDialog(),
-                    ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                          // side: BorderSide(color: Colors.white),
+                        ),
+                        color: HexColor('#006059'),
+                        child: Icon(
+                          Icons.edit_outlined,
+                          size: 15.0,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => _uploadFile()
+                        // _imageUpload()
+                        // _uploadTestImg(),
+                        // _imagePickerDialog(),
+                        ),
                   ),
                 ),
               ),
@@ -366,34 +413,32 @@ class _FormAlumnosState extends State<FormAlumnos> {
   final picker = ImagePicker();
   late PickedFile imageReal;
 
-  Future _uploadFile() async{
+  Future _uploadFile() async {
     final results = await FilePicker.platform.pickFiles(
-      allowMultiple: false,
-      type: FileType.custom,
-      allowedExtensions: ['png','jpg']
-    );
-    if(results == null){
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('no file selected'))
-      );
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['png', 'jpg']);
+    if (results == null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('no file selected')));
       return null;
-    }else{
+    } else {
       _filePath = results.files.single.path;
       _fileName = results.files.single.name;
-      
-      setState((){
+
+      setState(() {
         _otherImg = File(_filePath!);
         // _urlImage = url;
       });
     }
-
   }
 
-  Future _uploadTestImg() async{
+  Future _uploadTestImg() async {
     var stream = new http.ByteStream(_otherImg!.openRead());
     stream.cast();
     var length = await _otherImg!.length();
-    var request = http.MultipartRequest('POST',Uri.parse('${Apiconstant.url}/alumnos'));
+    var request =
+        http.MultipartRequest('POST', Uri.parse('${Apiconstant.url}/alumnos'));
     request.fields['nombres'] = "test";
     request.fields['apellidoPaterno'] = "test";
     request.fields['apellidoMaterno'] = "test";
@@ -426,8 +471,7 @@ class _FormAlumnosState extends State<FormAlumnos> {
     });
   }
 
-
-  Future _imageUpload() async{
+  Future _imageUpload() async {
     var image = await picker.pickImage(source: ImageSource.gallery);
     setState(() {
       _otherImg = File(image!.path);
@@ -448,7 +492,6 @@ class _FormAlumnosState extends State<FormAlumnos> {
   //   }
   // }
 
-
   _imagePickerDialog() {
     // final userInfo = Provider.of<User>(context, listen: false);
     // final meeting = Provider.of<Meeting>(context, listen: false);
@@ -458,7 +501,7 @@ class _FormAlumnosState extends State<FormAlumnos> {
         context: context,
         barrierDismissible: true,
         barrierLabel:
-        MaterialLocalizations.of(context).modalBarrierDismissLabel,
+            MaterialLocalizations.of(context).modalBarrierDismissLabel,
         barrierColor: Colors.black45,
         transitionDuration: const Duration(milliseconds: 200),
         pageBuilder: (BuildContext buildContext, Animation animation,
@@ -581,5 +624,4 @@ class _FormAlumnosState extends State<FormAlumnos> {
           );
         });
   }
-
 }
