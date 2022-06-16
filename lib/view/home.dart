@@ -23,65 +23,91 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
-  Future _refreshAgain() async {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
+    final double widthScreen = MediaQuery.of(context).size.width;
+    final double heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'I.E.P. Cusco',
-          style: TextStyle(color: ColorsSchool.fourthColor),
-        ),
-        backgroundColor: ColorsSchool.primaryColor,
-      ),
-      drawer: NavigationDrawerWidget(),
-      backgroundColor: ColorsSchool.fifthColor,
-      body: SafeArea(
-        // child: SingleChildScrollView(
-        child: RefreshIndicator(
-          onRefresh: _refreshAgain,
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  height: 150,
-                  // width: 150,
-                  decoration: BoxDecoration(color: ColorsSchool.primaryColor),
-                ),
-              ),
-              Expanded(
-                  child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                height: 150,
-                // width: 150,
-                decoration: BoxDecoration(color: ColorsSchool.secondaryColor),
-              )),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  height: 150,
-                  // width: 150,
-                  decoration: BoxDecoration(color: ColorsSchool.thirdColor),
-                ),
-              ),
-              Expanded(
-                  child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                height: 150,
-                // width: 150,
-                decoration: BoxDecoration(color: ColorsSchool.fourthColor),
-              )),
-            ],
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            'I.E.P. Cusco',
+            style: TextStyle(color: ColorsSchool.fourthColor),
           ),
+          backgroundColor: ColorsSchool.primaryColor,
         ),
-        // ),
+        drawer: NavigationDrawerWidget(),
+        backgroundColor: ColorsSchool.fifthColor,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    cardHome('Alumnos','Lista de alumnos',Icons.people_alt,widthScreen),
+                    cardHome('Docentes','Lista de alumnos',Icons.accessibility_new_outlined,widthScreen),
+                  ],
+                ),
+                Row(
+                  children: [
+                    cardHome('Salones','Lista de salones',Icons.account_balance_rounded,widthScreen),
+                    cardHome('Personal','Lista del personal',Icons.work_outlined,widthScreen),
+                  ],
+                ),
+                Row(
+                  children: [
+                    cardHome('Matriculas','Hacer una matricula',Icons.school,widthScreen),
+                    cardHome('Consultas','contactenos',Icons.phone,widthScreen),
+                  ],
+                )
+                // Container(
+                //   // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                //   height: 150,
+                //   width: widthScreen*0.5,
+                //   decoration: BoxDecoration(color: ColorsSchool.primaryColor),
+                // ),
+              ],
+
+              // Container(
+              //   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              //   height: 150,
+              //   // width: 150,
+              //   decoration: BoxDecoration(color: ColorsSchool.thirdColor),
+              // ),
+              // Container(
+              //   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              //   height: 150,
+              //   // width: 150,
+              //   decoration: BoxDecoration(color: ColorsSchool.fourthColor),
+              // ),
+              // ],
+            ),
+            // ),
+          ),
+        )
+        // bottomNavigationBar: NavigationBar(),
+        );
+  }
+
+  Container cardHome(String title, String subtitle, IconData icon,double widthScreen) {
+    return Container(
+      height: widthScreen * 0.5,
+      width: widthScreen * 0.5,
+      child: Card(
+        elevation: 3,
+        shadowColor: ColorsSchool.primaryColor,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Icon(icon,size: 60),
+            ListTile(
+              // leading: Icon(Icons.access_alarm_rounded),
+              title: Center(child: Text(title)),
+              subtitle: Center(child: Text(subtitle)),
+            ),
+          ],
+        ),
       ),
-      // bottomNavigationBar: NavigationBar(),
     );
   }
 }

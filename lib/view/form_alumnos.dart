@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:colegio_app/api/api_constant.dart';
@@ -34,6 +35,8 @@ class _FormAlumnosState extends State<FormAlumnos> {
   String? _filePath;
   String? _fileName;
   DateTime _currentDate = DateTime.now();
+  String? _selectedGender;
+  List<String> genders = ['Masculino', 'Femenino'];
 
   @override
   void initState() {
@@ -75,19 +78,21 @@ class _FormAlumnosState extends State<FormAlumnos> {
     super.dispose();
   }
 
+  Future _uploadFile() async {
+    await storage.uploadFile(_filePath!, _fileName!)
+        .then((value) => print('file uploaded'));
+    _urlImage = await storage.downloadURL(_fileName!);
+  }
+
   Future addAlumn() async {
     try {
-      await storage
-          .uploadFile(_filePath!, _fileName!)
-          .then((value) => print('file uploaded'));
-      _urlImage = await storage.downloadURL(_fileName!);
-      print('URl 3: $_urlImage');
+      await _uploadFile();
 
       Alumno alumn = Alumno(
           nombres: nombres.text,
           apellidoPaterno: apPaterno.text,
           apellidoMaterno: apMaterno.text,
-          sexo: sexo.text,
+          sexo: _selectedGender,
           dni: nroDni.text,
           fechaNacimiento: fechaNacimiento.text,
           celular: telefono.text,
@@ -139,219 +144,235 @@ class _FormAlumnosState extends State<FormAlumnos> {
 
   Future _selectDate(BuildContext context) async {
     print('date: $_currentDate');
-    DateTime? _datePicker = await showDatePicker(context: context, initialDate: _currentDate, firstDate: DateTime(_currentDate.year-30), lastDate: DateTime(_currentDate.year+1));
-    if(_datePicker !=null && _datePicker!=_currentDate){
-      setState((){
+    DateTime? _datePicker = await showDatePicker(
+        context: context,
+        initialDate: _currentDate,
+        firstDate: DateTime(_currentDate.year - 30),
+        lastDate: DateTime(_currentDate.year + 1));
+    if (_datePicker != null && _datePicker != _currentDate) {
+      setState(() {
         _currentDate = _datePicker;
-        fechaNacimiento.text = '${_datePicker.day}/${_datePicker.month}/${_datePicker.year}';
+        fechaNacimiento.text =
+            '${_datePicker.day}/${_datePicker.month}/${_datePicker.year}';
       });
       print('date 2: $_currentDate');
     }
   }
 
   Widget build(BuildContext context) {
-
     String title = 'Date Picker';
-      return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            'Agregar Alumno',
-            style: TextStyle(color: ColorsSchool.fourthColor, fontSize: 25),
-          ),
-          backgroundColor: ColorsSchool.primaryColor,
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Agregar Alumno',
+          style: TextStyle(color: ColorsSchool.fourthColor, fontSize: 25),
         ),
-        // backgroundColor: ColorsSchool.secondaryColor,
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Colors.white30,
-              Colors.white10,
-            ],
-          )),
-          child: SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Padding(
+        backgroundColor: ColorsSchool.primaryColor,
+      ),
+      // backgroundColor: ColorsSchool.secondaryColor,
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [
+            Colors.white30,
+            Colors.white10,
+          ],
+        )),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 50.0, right: 50.0, top: 10, bottom: 0),
+                  child: buildImagePicker(),
+                ),
+                Padding(
+                  // padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
+                  padding: EdgeInsets.only(
+                      left: 50.0, right: 50.0, top: 10, bottom: 0),
+                  child: widgetTextField(nombres, 'Nombre', 'Ingrese nombre',
+                      Icons.perm_identity_outlined),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 50.0, right: 50.0, top: 10, bottom: 0),
+                  // padding: EdgeInsets.symmetric(horizontal: 65),
+                  child: widgetTextField(apPaterno, 'Apellido Paterno',
+                      'Ingrese apellido paterno', Icons.perm_identity_outlined),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 50.0, right: 50.0, top: 10, bottom: 0),
+                  // padding: EdgeInsets.symmetric(horizontal: 65),
+                  child: widgetTextField(apMaterno, 'Apellido Materno',
+                      'Ingrese apellido materno', Icons.perm_identity_outlined),
+                ),
+                Padding(
                     padding: const EdgeInsets.only(
                         left: 50.0, right: 50.0, top: 10, bottom: 0),
-                    child: buildImagePicker(),
-                  ),
-                  Padding(
-                    // padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
-                    padding: EdgeInsets.only(
-                        left: 50.0, right: 50.0, top: 10, bottom: 0),
-                    child: widgetTextField(nombres, 'nombres', 'Ingrese nombre',
-                        Icons.perm_identity_outlined),
-                  ),
-                  Padding(
+                    child: DropdownButtonFormField(
+                        decoration: InputDecoration(
+                            labelText: 'Género',
+                            hintText: 'Ingrese género',
+                            icon: Icon(Icons.wc_outlined)),
+                        value: _selectedGender,
+                        items: genders.map((e) {
+                          return DropdownMenuItem(value: e, child: Text(e));
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedGender = value as String?;
+                          });
+                        })
+                    /*widgetTextField(
+                        sexo, 'Género', 'Ingrese género', Icons.wc_outlined),*/
+                    ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 50.0, right: 50.0, top: 10, bottom: 0),
+                  // padding: EdgeInsets.symmetric(horizontal: 65),
+                  child: widgetTextField(nroDni, 'DNI', 'Ingrese DNI',
+                      Icons.call_to_action_rounded),
+                ),
+                Padding(
                     padding: const EdgeInsets.only(
                         left: 50.0, right: 50.0, top: 10, bottom: 0),
-                    // padding: EdgeInsets.symmetric(horizontal: 65),
-                    child: widgetTextField(
-                        apPaterno,
-                        'A. Paterno',
-                        'Ingrese apellido paterno',
-                        Icons.perm_identity_outlined),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 50.0, right: 50.0, top: 10, bottom: 0),
-                    // padding: EdgeInsets.symmetric(horizontal: 65),
-                    child: widgetTextField(apMaterno, 'A. Materno',
-                        'Ingrese nombre', Icons.perm_identity_outlined),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 50.0, right: 50.0, top: 10, bottom: 0),
-                    // padding: EdgeInsets.symmetric(horizontal: 65),
-                    child: widgetTextField(
-                        sexo, 'genero', 'Ingrese nombre', Icons.wc_outlined),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 50.0, right: 50.0, top: 10, bottom: 0),
-                    // padding: EdgeInsets.symmetric(horizontal: 65),
-                    child: widgetTextField(nroDni, 'DNI', 'Ingrese nombre',
-                        Icons.call_to_action_rounded),
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.only(
-                          left: 50.0, right: 50.0, top: 10, bottom: 0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              flex: 5,
-                              child: widgetTextField(
-                                  fechaNacimiento,
-                                  'Fecha Ncto.',
-                                  'Ingrese nombre',
-                                  Icons.date_range_outlined)),
-                          Expanded(
-                              flex: 1,
-                              child: TextButton(
-                                  onPressed: () {},
-                                  child: IconButton(
-                                    icon: Icon(Icons.date_range_outlined),
-                                    onPressed: () {
-                                      _selectDate(context);
-                                    },
-                                  ))),
-                        ],
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 50.0, right: 50.0, top: 10, bottom: 0),
-                    // padding: EdgeInsets.symmetric(horizontal: 65),
-                    child: widgetTextField(
-                        telefono, 'Teléfono', 'Ingrese teléfono', Icons.phone),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 50.0, right: 50.0, top: 10, bottom: 0),
-                    // padding: EdgeInsets.symmetric(horizontal: 65),
-                    child: widgetTextField(
-                        email, 'Email', 'Ingrese email', Icons.email),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 50.0, right: 50.0, top: 10, bottom: 10),
-                    // padding: EdgeInsets.symmetric(horizontal: 65),
-                    child: widgetTextField(direccion, 'Dirección',
-                        'Ingrese dirección', Icons.home),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        height: 40,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          color: ColorsSchool.primaryColor,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: TextButton(
-                          onPressed: () {
-                            // Navigator.of(context).pop();
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (_) => AlumnosLista()));
-                            // setState(() {
-                            //
-                            // });
-                          },
-                          child: Text(
-                            'Cancelar',
-                            style: TextStyle(
-                                color: ColorsSchool.fourthColor, fontSize: 15),
-                          ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            flex: 5,
+                            child: widgetTextField(
+                                fechaNacimiento,
+                                'Fecha Nacimiento',
+                                'Ingrese fecha de nacimiento',
+                                Icons.date_range_outlined)),
+                        Expanded(
+                            flex: 1,
+                            child: TextButton(
+                                onPressed: () {},
+                                child: IconButton(
+                                  icon: Icon(Icons.date_range_outlined),
+                                  onPressed: () {
+                                    _selectDate(context);
+                                  },
+                                ))),
+                      ],
+                    )),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 50.0, right: 50.0, top: 10, bottom: 0),
+                  // padding: EdgeInsets.symmetric(horizontal: 65),
+                  child: widgetTextField(telefono, 'Teléfono',
+                      'Ingrese teléfono', Icons.phone, true),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 50.0, right: 50.0, top: 10, bottom: 0),
+                  // padding: EdgeInsets.symmetric(horizontal: 65),
+                  child: widgetTextField(
+                      email, 'Email', 'Ingrese email', Icons.email),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 50.0, right: 50.0, top: 10, bottom: 10),
+                  // padding: EdgeInsets.symmetric(horizontal: 65),
+                  child: widgetTextField(
+                      direccion, 'Dirección', 'Ingrese dirección', Icons.home),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      height: 40,
+                      width: 150,
+                      decoration: BoxDecoration(
+                        color: ColorsSchool.primaryColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: TextButton(
+                        onPressed: () {
+                          // Navigator.of(context).pop();
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (_) => AlumnosLista()));
+                          // setState(() {
+                          //
+                          // });
+                        },
+                        child: Text(
+                          'Cancelar',
+                          style: TextStyle(
+                              color: ColorsSchool.fourthColor, fontSize: 15),
                         ),
                       ),
-                      Container(
-                        height: 40,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          color: ColorsSchool.primaryColor,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: FlatButton(
-                          onPressed: () async {
-                            if (widget.dataAlumno != null) {
-                              updateAlumn();
-                            } else {
-                              addAlumn();
-                            }
-                            setState(() {});
-                            //TODO si se agrego correctamente
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (_) => AlumnosLista()));
-                          },
-                          child: widget.dataAlumno != null
-                              ? Text(
-                                  'Actualizar',
-                                  style: TextStyle(
-                                      color: ColorsSchool.fourthColor,
-                                      fontSize: 15),
-                                )
-                              : Text(
-                                  'Agregar',
-                                  style: TextStyle(
-                                      color: ColorsSchool.fourthColor,
-                                      fontSize: 15),
-                                ),
-                        ),
+                    ),
+                    Container(
+                      height: 40,
+                      width: 150,
+                      decoration: BoxDecoration(
+                        color: ColorsSchool.primaryColor,
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text('Ingrese todos los campos')
-                ],
-              ),
+                      child: FlatButton(
+                        onPressed: () async {
+                          if (widget.dataAlumno != null) {
+                            updateAlumn();
+                          } else {
+                            addAlumn();
+                          }
+                          setState(() {});
+                          //TODO si se agrego correctamente
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (_) => AlumnosLista()));
+                        },
+                        child: widget.dataAlumno != null
+                            ? Text(
+                                'Actualizar',
+                                style: TextStyle(
+                                    color: ColorsSchool.fourthColor,
+                                    fontSize: 15),
+                              )
+                            : Text(
+                                'Agregar',
+                                style: TextStyle(
+                                    color: ColorsSchool.fourthColor,
+                                    fontSize: 15),
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text('Ingrese todos los campos')
+              ],
             ),
           ),
         ),
-      );
+      ),
+    );
   }
 
   TextField widgetTextField(
-      controller, String label, String placeholder, IconData icono) {
+      controller, String label, String placeholder, IconData icon,
+      [bool? number]) {
     return TextField(
       controller: controller,
+      keyboardType: number == true ? TextInputType.number : TextInputType.text,
       decoration: InputDecoration(
           // border: OutlineInputBorder(),
           labelText: label,
           hintText: placeholder,
           icon: Icon(
-            icono,
+            icon,
             color: ColorsSchool.primaryColor,
           )),
     );
@@ -386,13 +407,13 @@ class _FormAlumnosState extends State<FormAlumnos> {
                           borderRadius: BorderRadius.circular(100),
                           // side: BorderSide(color: Colors.white),
                         ),
-                        color: HexColor('#006059'),
+                        color: ColorsSchool.thirdColor,
                         child: Icon(
                           Icons.edit_outlined,
-                          size: 15.0,
-                          color: Colors.white,
+                          size: 16.0,
+                          color: ColorsSchool.primaryColor,
                         ),
-                        onPressed: () => _uploadFile()
+                        onPressed: () => _pickFile()
                         // _imageUpload()
                         // _uploadTestImg(),
                         // _imagePickerDialog(),
@@ -413,7 +434,7 @@ class _FormAlumnosState extends State<FormAlumnos> {
   final picker = ImagePicker();
   late PickedFile imageReal;
 
-  Future _uploadFile() async {
+  Future _pickFile() async {
     final results = await FilePicker.platform.pickFiles(
         allowMultiple: false,
         type: FileType.custom,
