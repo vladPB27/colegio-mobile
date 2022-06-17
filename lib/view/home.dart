@@ -37,50 +37,36 @@ class _HomeState extends State<Home> {
           backgroundColor: ColorsSchool.primaryColor,
         ),
         drawer: NavigationDrawerWidget(),
-        backgroundColor: ColorsSchool.fifthColor,
+        backgroundColor: ColorsSchool.primaryColor,
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
               children: [
                 Row(
                   children: [
-                    cardHome('Alumnos','Lista de alumnos',Icons.people_alt,widthScreen),
-                    cardHome('Docentes','Lista de alumnos',Icons.accessibility_new_outlined,widthScreen),
+                    cardHome('Alumnos', 'Lista de alumnos', Icons.people_alt,
+                        widthScreen),
+                    cardHome('Docentes', 'Lista de alumnos',
+                        Icons.accessibility_new_outlined, widthScreen),
                   ],
                 ),
                 Row(
                   children: [
-                    cardHome('Salones','Lista de salones',Icons.account_balance_rounded,widthScreen),
-                    cardHome('Personal','Lista del personal',Icons.work_outlined,widthScreen),
+                    cardHome('Salones', 'Lista de salones',
+                        Icons.account_balance_rounded, widthScreen),
+                    cardHome('Personal', 'Lista del personal',
+                        Icons.work_outlined, widthScreen),
                   ],
                 ),
                 Row(
                   children: [
-                    cardHome('Matriculas','Hacer una matricula',Icons.school,widthScreen),
-                    cardHome('Consultas','contactenos',Icons.phone,widthScreen),
+                    cardHome('Matriculas', 'Hacer una matricula', Icons.school,
+                        widthScreen),
+                    cardHome(
+                        'Consultas', 'contactenos', Icons.phone, widthScreen),
                   ],
                 )
-                // Container(
-                //   // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                //   height: 150,
-                //   width: widthScreen*0.5,
-                //   decoration: BoxDecoration(color: ColorsSchool.primaryColor),
-                // ),
               ],
-
-              // Container(
-              //   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              //   height: 150,
-              //   // width: 150,
-              //   decoration: BoxDecoration(color: ColorsSchool.thirdColor),
-              // ),
-              // Container(
-              //   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              //   height: 150,
-              //   // width: 150,
-              //   decoration: BoxDecoration(color: ColorsSchool.fourthColor),
-              // ),
-              // ],
             ),
             // ),
           ),
@@ -89,7 +75,8 @@ class _HomeState extends State<Home> {
         );
   }
 
-  Container cardHome(String title, String subtitle, IconData icon,double widthScreen) {
+  Container cardHome(
+      String title, String subtitle, IconData icon, double widthScreen) {
     return Container(
       height: widthScreen * 0.5,
       width: widthScreen * 0.5,
@@ -99,11 +86,19 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Icon(icon,size: 60),
+            Icon(
+              icon,
+              size: 60,
+              color: ColorsSchool.secondaryColor,
+            ),
             ListTile(
               // leading: Icon(Icons.access_alarm_rounded),
-              title: Center(child: Text(title)),
-              subtitle: Center(child: Text(subtitle)),
+              title: Center(
+                  child: Text(
+                title,
+                style: TextStyle(color: ColorsSchool.primaryColor),
+              )),
+              subtitle: Center(child: Text(subtitle,style: TextStyle(color: ColorsSchool.secondaryColor))),
             ),
           ],
         ),

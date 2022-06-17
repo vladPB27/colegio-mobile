@@ -1,6 +1,7 @@
 import 'package:colegio_app/model/colors.dart';
 import 'package:colegio_app/view/alumnos/alumnos_lista.dart';
 import 'package:colegio_app/view/docentes/docentes_lista.dart';
+import 'package:colegio_app/view/matriculas/matriculas_list.dart';
 import 'package:colegio_app/view/salones/salones_lista.dart';
 import 'package:flutter/material.dart';
 
@@ -29,10 +30,12 @@ class NavigationDrawerWidget extends StatelessWidget {
             buildMenuItem(text: 'Docentes', icon: Icons.wc_outlined,onClicked:()=> selectedItem(context, 1)),
             buildMenuItem(
                 text: 'Salones', icon: Icons.account_balance_outlined,onClicked:()=> selectedItem(context, 2)),
+            buildMenuItem(
+                text: 'Matriculas', icon: Icons.note_add_outlined,onClicked:()=> selectedItem(context, 3)),
             Divider(color: ColorsSchool.fifthColor,),
-            buildMenuItem(text: 'Ajustes', icon: Icons.settings,onClicked:()=> selectedItem(context, 3)),
-            buildMenuItem(text: 'Acerca de', icon: Icons.mobile_screen_share_outlined,onClicked:()=> selectedItem(context, 4)),
-            buildMenuItem(text: 'Cerrar Sesión', icon: Icons.logout,onClicked:()=> selectedItem(context, 5)),
+            buildMenuItem(text: 'Ajustes', icon: Icons.settings,onClicked:()=> selectedItem(context, 4)),
+            buildMenuItem(text: 'Acerca de', icon: Icons.mobile_screen_share_outlined,onClicked:()=> selectedItem(context, 5)),
+            buildMenuItem(text: 'Cerrar Sesión', icon: Icons.logout,onClicked:()=> selectedItem(context, 6)),
           ],
         ),
       ),
@@ -85,6 +88,10 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SalonesLista()));
+        break;
+      case 3:
+        Navigator.of(context).push(MaterialPageRoute(builder: (_)=> MatriculasList()));
+        break;
     }
   }
 
